@@ -1,0 +1,25 @@
+# Turn on URL rewriting
+RewriteEngine On
+
+# Installation directory
+RewriteBase /gameplug
+
+# Protect hidden files from being viewed
+<Files .*>
+	Order Deny,Allow
+	Deny From All
+</Files>
+
+# Protect application and system files from being viewed
+RewriteRule ^(?:application|modules|system)\b.* index.php/$0 [L]
+
+# Allow any files or directories that exist to be displayed directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+RewriteCond %{REQUEST_URI} "webservice"
+RewriteRule ^(.*)$ /gameplug/webservice.php 
+
+# Rewrite all other URLs to index.php/URL
+RewriteCond %{REQUEST_URI} !^/?webservice/
+RewriteRule ^/?([^.]*)$ index.php [PT]
