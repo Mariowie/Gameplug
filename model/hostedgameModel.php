@@ -50,9 +50,9 @@
          * @param int $gameId
          * @param int $userId
          * @param boolean $waitingForPlayers 
-         * @return array(hostedGame(id,game.name,user.name,waitingForPlayers))
+         * @return array(hostedGame(id,game.name,user.name,waitingForPlayers,amountOfPlayer,message,ipaddress))
          */        
-        public function selectHostedGame($id,$gameId,$userId,$waitingForPlayers)
+        public function selectHostedGame($gameId,$userId,$id)
         {
             
         }
