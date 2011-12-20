@@ -1,0 +1,95 @@
+<types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.ecerami.com/schema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+        
+        <!-- 
+            declaring a array with the following elements
+            id int,
+            game.name string,
+            titel string,
+            description string,
+            points interger
+        -->
+        <complexType name="achievement">
+            <sequence>
+                <element name="id" type="xs:int"/>
+                <element name="gameName" type="xs:string"/>
+                <element name="titel" type="xs:string"/>
+                <element name="description" type="xs:string"/>
+                <element name="points" type="xs:int"/>
+            </sequence>
+        </complexType>
+        <complexType name="ArrayOfAchievements">
+            <complexContent>
+                <restriction base="soapenc:Array">
+                    <attribute ref="soapenc:arrayType" wsdl:arrayType="wsdl:achievement[]"/>
+                </restriction>
+            </complexContent>
+        </complexType>
+        <!-- (name,releaseDate,developer,downloadUrl -->
+        <complexType name="game">
+            <sequence>
+                <element name="name" type="xs:string"/>
+                <element name="releasDate" type="xs:int"/>
+                <element name="developer" type="xs:string"/>
+                <element name="downloadUrl" type="xs:string"/>
+            </sequence>
+        </complexType>
+        <complexType name="ArrayOfGames">
+            <complexContent>
+                <restriction base="soapenc:Array">
+                    <attribute ref="soapenc:arrayType" wsdl:arrayType="wsdl:game[]"/>
+                </restriction>
+            </complexContent>
+        </complexType>
+        <!-- array(highscore(game.name, user.name,score,date)) -->        
+        <complexType name="highscore">
+            <sequence>
+                <element name="gameName" type="xs:string"/>
+                <element name="userName" type="xs:string"/>
+                <element name="score" type="xs:int"/>
+                <element name="date" type="xs:int"/>
+            </sequence>
+        </complexType>
+        <complexType name="ArrayOfHighscores">
+            <complexContent>
+                <restriction base="soapenc:Array">
+                    <attribute ref="soapenc:arrayType" wsdl:arrayType="wsdl:highscore[]"/>
+                </restriction>
+            </complexContent>
+        </complexType>
+        <!-- array(nickname,openid,score) -->        
+        <complexType name="user">
+            <sequence>
+                <element name="nickname" type="xs:string"/>                
+                <element name="score" type="xs:int"/>
+                <element name="openId" type="xs:string"/>
+            </sequence>
+        </complexType>
+        <complexType name="ArrayOfUsers">
+            <complexContent>
+                <restriction base="soapenc:Array">
+                    <attribute ref="soapenc:arrayType" wsdl:arrayType="wsdl:user[]"/>
+                </restriction>
+            </complexContent>
+        </complexType>
+        <!-- array(hostedGame(id,game.name,user.name,waitingForPlayers,amountOfPlayer,message,ipaddress)) -->        
+        <complexType name="hostedgame">
+            <sequence>
+                <element name="id" type="xs:int"/> 
+                <element name="gameName" type="xs:string"/>                
+                <element name="userName" type="xs:int"/>
+                <element name="waitingForPlayers" type="xs:boolean"/>
+                <element name="amountOfPlayers" type="xs:int"/>
+                <element name="message" type="xs:string"/>
+                <element name="ipAddress" type="xs:string"/>
+            </sequence>
+        </complexType>
+        <complexType name="ArrayOfHostedgames">
+            <complexContent>
+                <restriction base="soapenc:Array">
+                    <attribute ref="soapenc:arrayType" wsdl:arrayType="wsdl:hostedgame[]"/>
+                </restriction>
+            </complexContent>
+        </complexType>
+    </schema>
+</types>

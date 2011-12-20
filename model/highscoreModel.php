@@ -1,12 +1,10 @@
 <?php
-    include('./database.php');
     
     /**
      * @author Mario Herbers
      */
-    class Highscore_Model extends Database
-    { 
-        /**
+    
+            /**
          * Inserts a new highscore
          * @param int $gameId
          * @param int $userId
@@ -14,7 +12,7 @@
          * @param Timestamp $date 
          * @return void
          */
-        public function insertHighscore($gameId,$userId,$score,$date)
+         function insertHighscore($gameId,$userId,$score,$date)
         {
             
         }
@@ -27,7 +25,7 @@
          * @param timestamp $date 
          * @return array(highscore(game.name, user.name,score,date))
          */
-        public function selectHighscore($gameId,$userId,$date)
+         function selectHighscore($gameId,$userId,$date)
         {
             
         }
@@ -38,9 +36,12 @@
          * @param int $userId 
          * @return void
          */
-        public function deleteHighscore($gameId,$userId)
+         function deleteHighscore($gameId,$userId)
         {
             
         }
+    class Highscore_Model extends Database
+    { 
+
     }    
 ?>    

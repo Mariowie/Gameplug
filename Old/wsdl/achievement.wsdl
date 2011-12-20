@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions name="GameplugWebservice"
+    xmlns="http://schemas.xmlsoap.org/wsdl/" 
+    targetNamespace="http://localhost/"     
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+    xmlns:tns="http://localhost/" 
+    
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" 
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    >
+  <message name="selectAchievementUserInput">
+        <part name="userId" type="xsd:int"/>
+        <part name="gameId" type="xsd:int"/>  
+    </message>
+    <message name="selectAchievementUserResponse">
+        <part name="array" type="tns:Achievements"/>
+    </message>
+    <!-- 
+        Declaration of the input and the output for the method
+        deleteAchievement 
+    -->
+    <message name="insertAchievementUserInput">
+        <part name="gameId" type="xsd:int"/>
+        <part name="userId" type="xsd:int"/>
+        <part name="date" type="xsd:int"/>
+    </message>
+    
+    <!-- 
+        Declaration of the input and the output for the method
+        deleteAchievement 
+    -->
+    <message name="deleteAchievementInput">
+        <part name="id" type="xsd:int"/>
+    </message>
+    <!-- 
+        Declaration of the input and the output for the method
+        updateAchievement      
+    -->
+    <message name="updateAchievementInput">
+        <part name="id" type="xsd:int"/>
+        <part name="gameId" type="xsd:int"/>
+        <part name="title" type="xsd:string"/>
+        <part name="description" type="xsd:string"/>
+        <part name="points" type="xsd:int"/>
+    </message>
+    <!-- 
+        Declaration of the input and the output for the method
+        insertAchievement
+    -->
+    <message name="insertAchievementResponse">
+        <part name="Return" type="xsd:int"/>
+    </message>  
+    <message name="insertAchievementInput">
+        <part name="id" type="xsd:int"/>
+        <part name="titel" type="xsd:string"/>
+        <part name="description" type="xsd:string"/>
+        <part name="points" type="xsd:int"/>   
+    </message>
+    <!--
+        Declaration of the input and the output for the method
+        selectAchievement
+    -->
+    <message name="selectAchievementInput">
+        <part name="id" type="xsd:int"/>
+        <part name="gameId" type="xsd:int"/>  
+    </message>
+    <message name="selectAchievementResponse">
+        <part name="array" type="tns:Achievements"/>
+    </message>   
+    
+    <portType name="AchievementClassPortType">
+        <operation name="insertAchievement">
+            <documentation> inserts a new achievement of a game</documentation>
+            <input message="tns:insertAchievementInput"/>
+            <output message="tns:insertAchievementResponse"/>
+        </operation>
+        <operation name="selectAchievement">
+            <documentation> selects a list of a achievements</documentation>
+            <input message="tns:selectAchievementInput"/>
+            <output message="tns:selectAchievementResponse"/>
+        </operation>
+        <operation name="updateAchievement">
+            <documentation> updates a achievements</documentation>
+            <input message="tns:updateAchievementInput"/>
+        </operation>
+        <operation name="deleteAchievement">
+            <documentation> delets a achievements from the database</documentation>
+            <input message="tns:deleteAchievementInput"/>
+        </operation>
+        <operation name="insertAchievementUser">
+            <documentation> delets a achievements from the database</documentation>
+            <input message="tns:insertAchievementUserInput"/>
+        </operation>
+        <operation name="selectAchievementUser">
+            <documentation> delets a achievements from the database</documentation>
+            <input message="tns:insertAchievementUserInput"/>
+            <output message="tns:selectAchievementUserResponse"/>
+        </operation>
+    </portType>
+    
+    <!-- 
+        achievementclassBinding
+    -->
+    <binding name="AchievementClassBinding" type="tns:AchievementClassPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="insertAchievement"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>
+        <operation name="selectAchievement"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>
+        <operation name="updateAchievement"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+        <operation name="deleteAchievement"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+        <operation name="insertAchievementUser"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+        <operation name="selectAchievementUser"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>
+    </binding>
+</definitions>

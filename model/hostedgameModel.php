@@ -1,12 +1,10 @@
 <?php
-    include('./database.php');
-    
+
     /**
      * @author Mario Herbers
      */
-    class Hostedgame_Model extends Database
-    { 
-        /**
+    
+            /**
          * Inserts a hostedgame into the database
          * @param int $userId
          * @param int $gameId
@@ -16,7 +14,7 @@
          * @param string $ipAddress 
          * @return id
          */
-        public function insertHostedGame($userId, $gameId, $message,$waitingForPlayers,$amountOfPlayers,$ipAddress)
+         function insertHostedGame($userId, $gameId, $message,$waitingForPlayers,$amountOfPlayers,$ipAddress)
         {
             
         }
@@ -29,7 +27,7 @@
          * @param int $amountOfPlayers 
          * @return void
          */
-        public function updateHostedGame($id, $message ,$waitingForPlayers, $amountOfPlayers)
+         function updateHostedGame($id, $message ,$waitingForPlayers, $amountOfPlayers)
         {
             
         }
@@ -39,7 +37,7 @@
          * @param int $id 
          * @return void
          */
-        public function deleteHostedGame($id)
+         function deleteHostedGame($id)
         {
             
         }
@@ -49,12 +47,16 @@
          * @param int $id
          * @param int $gameId
          * @param int $userId
-         * @param boolean $waitingForPlayers 
-         * @return array(hostedGame(id,game.name,user.name,waitingForPlayers,amountOfPlayer,message,ipaddress))
+         * 
+         * @return  array(hostedGame(id,game.name,user.name,waitingForPlayers,amountOfPlayer,message,ipaddress))
          */        
-        public function selectHostedGame($gameId,$userId,$id)
+         function selectHostedGame($gameId,$userId,$id)
         {
             
         }
+        
+    class Hostedgame_Model extends Database
+    { 
+
     }    
 ?>    

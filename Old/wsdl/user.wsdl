@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions name="GameplugWebservice"
+    xmlns="http://schemas.xmlsoap.org/wsdl/" 
+    targetNamespace="http://localhost/"     
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+    xmlns:tns="http://localhost/" 
+    
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" 
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    >
+    
+    <message name="insertUserInput">
+        <part name="nickname" type="xsd:string"/>
+        <part name="openId" type="xsd:string"/>
+    </message>
+    
+    <message name="insertUserResponse">
+        <part name="id" type="xsd:int"/>
+    </message>
+  
+    <message name="selectUserInput">
+        <part name="openId" type="xsd:string"/>
+        <part name="id" type="xsd:int"/>
+    </message>
+  
+    <message name="selectUserResponse">
+        <part name="array" type="tns:ArrayOfUsers" />
+    </message>
+  
+    <message name="updateUserInput">
+        <part name="id" type="xsd:int"/>
+        <part name="nickname" type="xsd:string"/>
+        <part name="score" type="xsd:int"/>
+    </message>
+  
+    <portType name="UserClassPortType">
+        <operation name="insertUser">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:insertUserInput"/>   
+            <output message="tns:insertUserResponse"></output>
+        </operation>  
+        <operation name="selectUser">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:selectUserInput"/>   
+            <output message="tns:selectUserResponse"></output>
+        </operation> 
+        <operation name="updateUser">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:updateUserInput"/>   
+        </operation> 
+    </portType>
+    
+    <binding name="UserClassBinding" type="tns:UserClassPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="insertUser"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>    
+        <operation name="selectUser"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>
+        <operation name="updateUser"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+    </binding>
+</definitions>

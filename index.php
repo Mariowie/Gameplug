@@ -1,8 +1,13 @@
 <?php
-	
+    ini_set("soap.wsdl_cache_enabled", "1"); // disabling WSDL cache
+    $client = new SoapClient("http://localhost/gameplug/gameplug.wsdl");
+    $website = new website();
+    $website->users();
 
+        $url = $_SERVER["REQUEST_URI"];
+    
 
-    class Webservice
+    class website
     {
         
         /**

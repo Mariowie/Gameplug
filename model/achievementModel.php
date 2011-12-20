@@ -1,12 +1,26 @@
 <?php
-    include('./database.php');
+    
     
     /**
      * @author Mario Herbers
      */
-    class Achievement_Model extends Database
-    {        
-        /**
+    
+       /**
+        * selects achievements with game id or only a specific achievement.
+        * @return array(achievement(id,game.name,titel,description,points))  
+        * @param int $gameId
+        * @param int $id 
+        */
+       function selectAchievement($gameId,$id)
+       {
+           $array = array();
+           $database = new database();
+           array_push($array,array('id'=>1,'gameName'=>'test','titel'=>'achievement','description'=>'desc','points'=>123));
+           array_push($array,array('id'=>2,'gameName'=>'wax','titel'=>'drasdf','description'=>'weewrew','points'=>333));
+           return $array;
+       }
+       
+       /**
          *  function inserts achievement, and returns id.
          * 
          * @param int $gameId
@@ -15,23 +29,12 @@
          * @param int $points 
          * @return int id
          */
-       public function insertAchievement($gameId, $titel, $description, $points)
+       function insertAchievement($gameId, $titel, $description, $points)
        {
-           
+           return 91;
        }
        
-       /**
-        * selects achievements with game id or only a specific achievement.
-        * @return array(achievement(id,game.name,titel,description,points))  
-        * @param int $gameId
-        * @param int $id 
-        */
-       public function selectAchievement($gameId,$id)
-       {
-           
-       }
-       
-       /**
+              /**
         * updates an achievement
         * @param int $id
         * @param int $gameId
@@ -40,7 +43,7 @@
         * @param int $points
         * @return void
         */
-       public function updateAchievement($id,$gameId,$title,$description,$points)
+       function updateAchievement($id,$gameId,$title,$description,$points)
        {
            
        }
@@ -50,7 +53,7 @@
         * @param int $id 
         * @return void
         */
-       public function deleteAchievement($id)
+       function deleteAchievement($id)
        {
            
        }
@@ -62,7 +65,7 @@
         * @param timestamp $date
         * @return void
         */
-       public function insertAchievementUser($userId,$achievementId,$date)
+       function insertAchievementUser($userId,$achievementId,$date)
        {
            
        }
@@ -73,10 +76,16 @@
         * @param int $gameId 
         * @return void
         */
-       public function selectAchievementUser($userId, $gameId) 
+       function selectAchievementUser($userId, $gameId) 
        {
           
        }
+       
+    class Achievement_Model// extends Database
+    {      
+        
+            
+
     }
 
 ?>

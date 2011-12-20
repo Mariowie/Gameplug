@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions name="GameplugWebservice"
+    xmlns="http://schemas.xmlsoap.org/wsdl/" 
+    targetNamespace="http://localhost/"     
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+    xmlns:tns="http://localhost/" 
+    
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" 
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    >
+    <message name="gameInput">
+        <part name="id" type="xsd:int"/>
+        <part name="name" type="xsd:string"/>
+        <part name="releaseDate" type="xsd:int"/>
+        <part name="developer" type="xsd:string"/>
+        <part name="downloadUrl" type="xsd:string"/>
+    </message>
+
+    <message name="selectGameInput">
+        <part name="id" type="xsd:int"/>
+        <part name="name" type="xsd:string"/>
+        <part name="developer" type="xsd:string"/>
+    </message>
+    
+    <message name="selectGameResponse">
+        <part name="array" type="tns:ArrayOfGames"/>
+    </message>
+    
+    <message name="deleteGameInput">
+        <part name="id" type="xsd:int"/>
+    </message>
+    
+    <portType name="GameClassPortType">
+        <operation name="insertGame">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:gameInput"/>            
+        </operation>
+        <operation name="updateGame">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:gameInput"/>
+        </operation>
+        <operation name="selectGame">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:selectGameInput"/>
+            <output message="tns:selectGameResponse"/>
+        </operation>
+        <operation name="deleteGame">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:deleteGameInput"/>
+        </operation>
+    </portType>
+    
+    <binding name="GameClassBinding" type="tns:GameClassPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="insertGame"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+        <operation name="updateGame"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+        <operation name="selectGame"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>
+        <operation name="deleteGame"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+    </binding>
+</definitions>

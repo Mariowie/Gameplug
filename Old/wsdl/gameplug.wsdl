@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" 
+    xmlns:tns="http://localhost/" 
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    xmlns="http://schemas.xmlsoap.org/wsdl/" 
+    targetNamespace="http://localhost/" >
+
+ <!-- 
+        Declaration of complex types
+ -->
+    <types>
+        <xsd:schema 
+            targetNamespace="http://localhost/" >
+            <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+            <xsd:import namespace="http://schemas.xmlsoap.org/wsdl/"/>
+            <!-- 
+                declaring a array with the following elements
+                id int,
+                game.name string,
+                titel string,
+                description string,
+                points interger
+            -->
+
+            <xsd:complexType name="Achievement">
+                <xsd:all>
+                    <xsd:element name="id" type="xsd:int"/>
+                    <xsd:element name="gameName" type="xsd:string"/>
+                    <xsd:element name="titel" type="xsd:string"/>
+                    <xsd:element name="description" type="xsd:string"/>
+                    <xsd:element name="points" type="xsd:int"/>
+                </xsd:all>
+            </xsd:complexType>
+            <xsd:complexType name="Achievements">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Achievement[]"/>
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <!-- (name,releaseDate,developer,downloadUrl -->
+            <xsd:complexType name="Game">
+                <xsd:all>
+                    <xsd:element name="name" type="xsd:string"/>
+                    <xsd:element name="releasDate" type="xsd:int"/>
+                    <xsd:element name="developer" type="xsd:string"/>
+                    <xsd:element name="downloadUrl" type="xsd:string"/>
+                </xsd:all>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfGames">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="wsdl:Game[]"/>
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <!-- array(highscore(game.name, user.name,score,date)) -->        
+            <xsd:complexType name="Highscore">
+                <xsd:all>
+                    <xsd:element name="gameName" type="xsd:string"/>
+                    <xsd:element name="userName" type="xsd:string"/>
+                    <xsd:element name="score" type="xsd:int"/>
+                    <xsd:element name="date" type="xsd:int"/>
+                </xsd:all>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfHighscores">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="wsdl:highscore[]"/>
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <!-- array(nickname,openid,score) -->        
+            <xsd:complexType name="user">
+                <xsd:all>
+                    <xsd:element name="nickname" type="xsd:string"/>                
+                    <xsd:element name="score" type="xsd:int"/>
+                    <xsd:element name="openId" type="xsd:string"/>
+                </xsd:all>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfUsers">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="wsdl:user[]"/>
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+            <!-- array(hostedGame(id,game.name,user.name,waitingForPlayers,amountOfPlayer,message,ipaddress)) -->        
+            <xsd:complexType name="hostedgame">
+                <xsd:all>
+                    <xsd:element name="id" type="xsd:int"/> 
+                    <xsd:element name="gameName" type="xsd:string"/>                
+                    <xsd:element name="userName" type="xsd:int"/>
+                    <xsd:element name="waitingForPlayers" type="xsd:boolean"/>
+                    <xsd:element name="amountOfPlayers" type="xsd:int"/>
+                    <xsd:element name="message" type="xsd:string"/>
+                    <xsd:element name="ipAddress" type="xsd:string"/>
+                </xsd:all>
+            </xsd:complexType>
+            <xsd:complexType name="ArrayOfHostedgames">
+                <xsd:complexContent>
+                    <xsd:restriction base="SOAP-ENC:Array">
+                        <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="wsdl:hostedgame[]"/>
+                    </xsd:restriction>
+                </xsd:complexContent>
+            </xsd:complexType>
+        </xsd:schema>
+    </types>  
+
+   
+    <message name="selectAchievementUserInput">
+        <part name="userId" type="xsd:int"/>
+        <part name="gameId" type="xsd:int"/>  
+    </message>
+    <message name="selectAchievementUserResponse">
+        <part name="array" type="tns:Achievements"/>
+    </message>
+    <!-- 
+        Declaration of the input and the output for the method
+        deleteAchievement 
+    -->
+    <message name="insertAchievementUserInput">
+        <part name="gameId" type="xsd:int"/>
+        <part name="userId" type="xsd:int"/>
+        <part name="date" type="xsd:int"/>
+    </message>
+    
+    <!-- 
+        Declaration of the input and the output for the method
+        deleteAchievement 
+    -->
+    <message name="deleteAchievementInput">
+        <part name="id" type="xsd:int"/>
+    </message>
+    <!-- 
+        Declaration of the input and the output for the method
+        updateAchievement      
+    -->
+    <message name="updateAchievementInput">
+        <part name="id" type="xsd:int"/>
+        <part name="gameId" type="xsd:int"/>
+        <part name="title" type="xsd:string"/>
+        <part name="description" type="xsd:string"/>
+        <part name="points" type="xsd:int"/>
+    </message>
+    <!-- 
+        Declaration of the input and the output for the method
+        insertAchievement
+    -->
+    <message name="insertAchievementResponse">
+        <part name="Return" type="xsd:int"/>
+    </message>  
+    <message name="insertAchievementInput">
+        <part name="id" type="xsd:int"/>
+        <part name="titel" type="xsd:string"/>
+        <part name="description" type="xsd:string"/>
+        <part name="points" type="xsd:int"/>   
+    </message>
+    <!--
+        Declaration of the input and the output for the method
+        selectAchievement
+    -->
+    <message name="selectAchievementInput">
+        <part name="id" type="xsd:int"/>
+        <part name="gameId" type="xsd:int"/>  
+    </message>
+    <message name="selectAchievementResponse">
+        <part name="array" type="tns:Achievements"/>
+    </message>   
+    
+    <portType name="AchievementClassPortType">
+        <operation name="insertAchievement">
+            <documentation> inserts a new achievement of a game</documentation>
+            <input message="tns:insertAchievementInput"/>
+            <output message="tns:insertAchievementResponse"/>
+        </operation>
+        <operation name="selectAchievement">
+            <documentation> selects a list of a achievements</documentation>
+            <input message="tns:selectAchievementInput"/>
+            <output message="tns:selectAchievementResponse"/>
+        </operation>
+        <operation name="updateAchievement">
+            <documentation> updates a achievements</documentation>
+            <input message="tns:updateAchievementInput"/>
+        </operation>
+        <operation name="deleteAchievement">
+            <documentation> delets a achievements from the database</documentation>
+            <input message="tns:deleteAchievementInput"/>
+        </operation>
+        <operation name="insertAchievementUser">
+            <documentation> delets a achievements from the database</documentation>
+            <input message="tns:insertAchievementUserInput"/>
+        </operation>
+        <operation name="selectAchievementUser">
+            <documentation> delets a achievements from the database</documentation>
+            <input message="tns:insertAchievementUserInput"/>
+            <output message="tns:selectAchievementUserResponse"/>
+        </operation>
+    </portType>
+    
+    <!-- 
+        achievementclassBinding
+    -->
+    <binding name="AchievementClassBinding" type="tns:AchievementClassPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="insertAchievement"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body use='encoded' namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body use='encoded' namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>
+        <operation name="selectAchievement"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>
+        <operation name="updateAchievement"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+        <operation name="deleteAchievement"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+        <operation name="insertAchievementUser"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+        <operation name="selectAchievementUser"> <soap:operation style="rpc"/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>
+    </binding>
+
+        <message name="gameInput">
+            <part name="id" type="xsd:int"/>
+            <part name="name" type="xsd:string"/>
+            <part name="releaseDate" type="xsd:int"/>
+            <part name="developer" type="xsd:string"/>
+            <part name="downloadUrl" type="xsd:string"/>
+        </message>
+        
+        <message name="selectGameInput">
+            <part name="id" type="xsd:int"/>
+            <part name="name" type="xsd:string"/>
+            <part name="developer" type="xsd:string"/>
+        </message>
+        
+        <message name="selectGameResponse">
+            <part name="array" type="tns:ArrayOfGames"/>
+        </message>
+        
+        <message name="deleteGameInput">
+            <part name="id" type="xsd:int"/>
+        </message>
+        
+        <portType name="GameClassPortType">
+            <operation name="insertGame">
+                <documentation> inserts a new game of a game</documentation>
+                <input message="tns:gameInput"/>            
+            </operation>
+            <operation name="updateGame">
+                <documentation> inserts a new game of a game</documentation>
+                <input message="tns:gameInput"/>
+            </operation>
+            <operation name="selectGame">
+                <documentation> inserts a new game of a game</documentation>
+                <input message="tns:selectGameInput"/>
+                <output message="tns:selectGameResponse"/>
+            </operation>
+            <operation name="deleteGame">
+                <documentation> inserts a new game of a game</documentation>
+                <input message="tns:deleteGameInput"/>
+            </operation>
+        </portType>
+        
+        <binding name="GameClassBinding" type="tns:GameClassPortType">
+            <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+            <operation name="insertGame"> <soap:operation/>
+                <input>
+                    <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                </input>
+            </operation>
+            <operation name="updateGame"> <soap:operation/>
+                <input>
+                    <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                </input>
+            </operation>
+            <operation name="selectGame"> <soap:operation/>
+                <input>
+                    <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                </input>
+                <output>
+                    <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                </output>
+            </operation>
+            <operation name="deleteGame"> <soap:operation/>
+                <input>
+                    <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                </input>
+            </operation>
+        </binding>
+
+            <message name="insertHighscoreInput">
+                <part name="gameId" type="xsd:int"/>
+                <part name="userId" type="xsd:int"/>
+                <part name="date" type="xsd:int"/>
+                <part name="score" type="xsd:int"/>
+            </message>
+            
+            <message name="selectHighscoreInput">
+                <part name="gameId" type="xsd:int"/>
+                <part name="userId" type="xsd:int"/>
+                <part name="date" type="xsd:int"/>
+            </message>
+            
+            <message name="selectHighscoreResponse">
+                <part name="array" type="tns:ArrayOfHighscores"/>
+            </message>
+            
+            <message name="deleteHighscoreInput">
+                <part name='gameId' type="xsd:int"/>
+                <part name='userId' type="xsd:int"/>
+            </message>
+            
+            <portType name="HighscoreClassPortType">
+                <operation name="insertHighscore">
+                    <documentation> inserts a new game of a game</documentation>
+                    <input message="tns:insertHighscoreInput"/>            
+                </operation>
+                <operation name="selectHighscore">
+                    <documentation>
+                        selects a list of highscores
+                    </documentation>
+                    <input message="tns:selectHighscoreInput"/>
+                    <output message="tns:selectHighscoreResponse"/>
+                </operation>
+                <operation name="deleteHighscore">
+                    <documentation>
+                        deletes a highscore
+                    </documentation>
+                    <input message="tns:deleteHighscoreInput"/>
+                </operation>
+            </portType>
+            
+            <binding name="HighscoreClassBinding" type="tns:HighscoreClassPortType">
+                <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+                <operation name="insertHighscore"> <soap:operation/>
+                    <input>
+                        <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                    </input>
+                </operation>
+                <operation name="selectHighscore"> <soap:operation/>
+                    <input>
+                        <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                    </input>
+                    <output>
+                        <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                    </output>
+                </operation>
+                <operation name="deleteHighscore"><soap:operation/>
+                    <input>
+                        <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                    </input>
+                </operation>
+            </binding>
+            <message name="insertUserInput">
+                <part name="nickname" type="xsd:string"/>
+                <part name="openId" type="xsd:string"/>
+            </message>
+            
+            <message name="insertUserResponse">
+                <part name="id" type="xsd:int"/>
+            </message>
+            
+            <message name="selectUserInput">
+                <part name="openId" type="xsd:string"/>
+                <part name="id" type="xsd:int"/>
+            </message>
+            
+            <message name="selectUserResponse">
+                <part name="array" type="tns:ArrayOfUsers" />
+            </message>
+            
+            <message name="updateUserInput">
+                <part name="id" type="xsd:int"/>
+                <part name="nickname" type="xsd:string"/>
+                <part name="score" type="xsd:int"/>
+            </message>
+            
+            <portType name="UserClassPortType">
+                <operation name="insertUser">
+                    <documentation> inserts a new game of a game</documentation>
+                    <input message="tns:insertUserInput"/>   
+                    <output message="tns:insertUserResponse"></output>
+                </operation>  
+                <operation name="selectUser">
+                    <documentation> inserts a new game of a game</documentation>
+                    <input message="tns:selectUserInput"/>   
+                    <output message="tns:selectUserResponse"></output>
+                </operation> 
+                <operation name="updateUser">
+                    <documentation> inserts a new game of a game</documentation>
+                    <input message="tns:updateUserInput"/>   
+                </operation> 
+            </portType>
+            
+            <binding name="UserClassBinding" type="tns:UserClassPortType">
+                <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+                <operation name="insertUser"> <soap:operation/>
+                    <input>
+                        <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                    </input>
+                    <output>
+                        <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                    </output>
+                </operation>    
+                <operation name="selectUser"> <soap:operation/>
+                    <input>
+                        <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                    </input>
+                    <output>
+                        <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                    </output>
+                </operation>
+                <operation name="updateUser"> <soap:operation/>
+                    <input>
+                        <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+                    </input>
+                </operation>
+            </binding>
+    <message name="insertHostedgameInput">
+        <part name="userId" type="xsd:int"/>
+        <part name="gameId" type="xsd:int"/>
+        <part name="message" type="xsd:string"/>
+        <part name="waitingForPlayers" type="xsd:boolean"/>
+        <part name="amountOfPlayers" type="xsd:int"/>
+        <part name="ipAddress" type="xsd:string"/>
+    </message>
+    
+    <message name="insertHostedgameResponse">
+        <part name="id" type="xsd:int"/>
+    </message>
+    
+    <message name="updateHostedgameInput">
+        <part name="id" type="xsd:int"/>
+        <part name="message" type="xsd:string"/>
+        <part name="waitingForPlayers" type="xsd:boolean"/>
+        <part name="amountOfPlayers" type="xsd:int"/>
+    </message>
+    
+    <message name="deleteHostedgameInput">
+        <part name="id" type="xsd:int"></part>
+    </message>
+    
+    <message name="selectHostedgameInput">
+        <part name="id" type="xsd:int"/>
+        <part name="gameId" type="xsd:int"/>
+        <part name="userId" type="xsd:int"/>
+    </message>
+    
+    <message name="selectHostedgameResponse">
+        <part name="array" type="tns:ArrayOfHostedgames"/>
+    </message>
+    
+    <portType name="HostedgameClassPortType">
+        <operation name="insertHostedgame">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:insertHostedgameInput"/>   
+            <output message="tns:insertHostedgameResponse"></output>
+        </operation> 
+        <operation name="updateHostedgame">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:updateHostedgameInput"/>   
+        </operation> 
+        <operation name="deleteHostedgame">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:deleteHostedgameInput"/>   
+        </operation> 
+        <operation name="selectHostedgame">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:selectHostedgameInput"/>   
+            <output message="tns:selectHostedgameResponse"></output>
+        </operation> 
+    </portType>
+    
+    <binding name="HostedgameClassBinding" type="tns:HostedgameClassPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="insertHostedgame"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>
+        <operation name="updateHostedgame"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+        <operation name="deleteHostedgame"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+        <operation name="selectHostedgame"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>
+    </binding>
+    <service name="GameplugWebservice">
+        <documentation>
+            This is the Hello Name Interface
+        </documentation>
+        <port name="Achievement_Model" binding="tns:AchievementClassBinding">
+            <soap:address location="http://localhost/gameplug/controller/achievement.php"/>
+        </port>
+        <port name="Game_Model" binding="tns:GameClassBinding">
+            <soap:address location="http://localhost/gameplug/controller/game.php"/>
+        </port>        
+        <port name="Highscore_Model" binding="tns:HighscoreClassBinding">
+            <soap:address location="http://localhost/gameplug/controller/highscore.php"/>
+        </port>
+        
+        <port name="User_Model" binding="tns:UserClassBinding">
+            <soap:address location="http://localhost/gameplug/controller/user.php"/>
+        </port>
+        
+        <port name="Hostedgame_Model" binding="tns:HostedgameClassBinding">
+            <soap:address location="http://localhost/gameplug/controller/hostedgame.php"/>
+        </port>
+    </service>
+</definitions>

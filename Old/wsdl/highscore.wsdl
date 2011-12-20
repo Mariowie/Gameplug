@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<definitions name="GameplugWebservice"
+    xmlns="http://schemas.xmlsoap.org/wsdl/" 
+    targetNamespace="http://localhost/"     
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+    xmlns:tns="http://localhost/" 
+    
+    xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" 
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" 
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+    > 
+    <message name="insertHighscoreInput">
+        <part name="gameId" type="xsd:int"/>
+        <part name="userId" type="xsd:int"/>
+        <part name="date" type="xsd:int"/>
+        <part name="score" type="xsd:int"/>
+    </message>
+    
+    <message name="selectHighscoreInput">
+        <part name="gameId" type="xsd:int"/>
+        <part name="userId" type="xsd:int"/>
+        <part name="date" type="xsd:int"/>
+    </message>
+    
+    <message name="selectHighscoreResponse">
+        <part name="array" type="tns:ArrayOfHighscores"/>
+    </message>
+    
+    <message name="deleteHighscoreInput">
+        <part name='gameId' type="xsd:int"/>
+        <part name='userId' type="xsd:int"/>
+    </message>
+    
+    <portType name="HighscoreClassPortType">
+        <operation name="insertHighscore">
+            <documentation> inserts a new game of a game</documentation>
+            <input message="tns:insertHighscoreInput"/>            
+        </operation>
+        <operation name="selectHighscore">
+            <documentation>
+                selects a list of highscores
+            </documentation>
+            <input message="tns:selectHighscoreInput"/>
+            <output message="tns:selectHighscoreResponse"/>
+        </operation>
+        <operation name="deleteHighscore">
+            <documentation>
+                deletes a highscore
+            </documentation>
+            <input message="tns:deleteHighscoreInput"/>
+        </operation>
+    </portType>
+    
+    <binding name="HighscoreClassBinding" type="tns:HighscoreClassPortType">
+        <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="insertHighscore"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+        <operation name="selectHighscore"> <soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+            <output>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </output>
+        </operation>
+        <operation name="deleteHighscore"><soap:operation/>
+            <input>
+                <soap:body namespace="urn:HelloService" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/> 
+            </input>
+        </operation>
+    </binding>
+</definitions>
