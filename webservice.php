@@ -1,8 +1,14 @@
 <?php
 
 require_once("nuSOAP/lib/nusoap.php");
-include('/model/achievementModel.php');
 include('database.php');
+include('model/achievementModel.php');
+include('model/gameModel.php');
+include('model/highscoreModel.php');
+include('model/hostedgameModel.php');
+include('model/userModel.php');
+  ini_set("soap.wsdl_cache_enabled", 0); 
+  ini_set("session.auto_start", 0); 
 $namespace = "http://localhost/gameplug/webservice.php";
 // create a new soap server
 $server = new soap_server();
@@ -52,7 +58,7 @@ $server->wsdl->addComplexType('Highscores','complexType','array','','SOAP-ENC:Ar
 //array(hostedGame(id,game.name,user.name,waitingForPlayers,amountOfPlayer,message,ipaddress))
 $server->wsdl->addComplexType('Hostedgame','complexType','struct','all','',
 		array(
-                        'id'    =>array('name'  =>  'id', 'type'    => 'xsd:string'),
+                        'id'    =>array('name'  =>  'id', 'type'    => 'xsd:int'),
 			'gameName' => array('name' => 'gameName','type' => 'xsd:string'),
 			'userName' => array('name' => 'userName','type' => 'xsd:string'),
 			'waitingForPlayers' => array('name' => 'waitingForPlayers','type' => 'xsd:boolean'),
@@ -67,7 +73,7 @@ $server->wsdl->addComplexType('Hostedgames','complexType','array','','SOAP-ENC:A
 
 $server->wsdl->addComplexType('User','complexType','struct','all','',
 		array(
-
+                        'id'    =>array('name'=>'id','type'=>'xsd:int'),
 			'nickname' => array('name' => 'nickname','type' => 'xsd:string'),
 			'openId' => array('name' => 'openId','type' => 'xsd:string'),
 			'score' => array('name' => 'score','type' => 'xsd:int'),
@@ -119,7 +125,7 @@ $server->register(
                 // parameter list:
                 array('id'=>'xsd:int','gameId'=>'xsd:int','titel'=>'xsd:string','description'=>'xsd:string','id'=>'xsd:int'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:void'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)
@@ -136,7 +142,7 @@ $server->register(
                 // parameter list:
                 array('id'=>'xsd:int'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:void'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)
@@ -154,7 +160,7 @@ $server->register(
                 // parameter list:
                 array('userId'=>'xsd:int','achievementId'=>'xsd:int','date'=>'xsd:int'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:void'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)
@@ -182,15 +188,18 @@ $server->register(
                 // use: encoded or literal
                 'encoded',
                 // description: documentation for the method
-                'Returns an exhaustive list of all customers in the database');	
+                '<br/>selects the achievements of a user
+                 <br/>@param int $userId required
+                 <br/>@param int $gameId optional set -1 if not needed
+                 <br/>@return void');	
 
 $server->register(
                 // method name:
                 'insertGame', 	
                 // parameter list:
-                array('id'=>'xsd:int','name'=>'xsd:string','releaseDate'=>'xsd:int','developer'=>'xsd:string','downloadUrl'=>'xsd:string'), 
+                array('name'=>'xsd:string','releaseDate'=>'xsd:int','developer'=>'xsd:string','downloadUrl'=>'xsd:string'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:int'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)
@@ -208,7 +217,7 @@ $server->register(
                 // parameter list:
                 array('id'=>'xsd:int','name'=>'xsd:string','releaseDate'=>'xsd:int','developer'=>'xsd:string','downloadUrl'=>'xsd:string'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:void'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)
@@ -244,7 +253,7 @@ $server->register(
                 // parameter list:
                 array('id'=>'xsd:int'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:void'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)
@@ -262,7 +271,7 @@ $server->register(
                 // parameter list:
                 array('gameId'=>'xsd:int','userId'=>'xsd:int','score'=>'xsd:int','date'=>'xsd:int'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:void'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)
@@ -298,7 +307,7 @@ $server->register(
                 // parameter list:
                 array('gameId'=>'xsd:int','userId'=>'xsd:int'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:void'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)
@@ -333,7 +342,7 @@ $server->register(
                 // parameter list:
                 array('id'=>'xsd:int','message'=>'xsd:string','waitingForPlayers'=>'xsd:boolean','amountOfPlayers'=>'xsd:int'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:void'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)
@@ -351,7 +360,7 @@ $server->register(
                 // parameter list:
                 array('id'=>'xsd:int'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:void'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)
@@ -405,7 +414,7 @@ $server->register(
                 // parameter list:
                 array('openId'=>'xsd:string','nickname'=>'xsd:string'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:int'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)
@@ -423,7 +432,7 @@ $server->register(
                 // parameter list:
                 array('id'=>'xsd:int','nickname'=>'xsd:string','score'=>'xsd:int'), 
                 // return value(s):
-                array(),
+                array('return'=>'xsd:void'),
                 // namespace:
                 $namespace,
                 // soapaction: (use default)

@@ -13,11 +13,50 @@
         */
        function selectAchievement($gameId,$id)
        {
-           $array = array();
-           $database = new database();
-           array_push($array,array('id'=>1,'gameName'=>'test','titel'=>'achievement','description'=>'desc','points'=>123));
-           array_push($array,array('id'=>2,'gameName'=>'wax','titel'=>'drasdf','description'=>'weewrew','points'=>333));
-           return $array;
+ 
+           $database = new Database();
+           if($gameId>=0 && $id >= 0)
+           {
+                $sql = "SELECT `achievements`.`id`,`achievements`.`titel`,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName
+                       FROM `achievements` LEFT JOIN `games` 
+                       ON `achievements`.gameId = `games`.id
+                       WHERE `games`.id = '%s' AND `achievements`.id = '%s'";
+                $result =$database->query($sql,array($gameId,$id));
+                $array = $database->resultArray($result);
+                return $array; 
+           }
+           elseif($gameId >= 0 || $id >= 0)
+           {
+               if($gameId >= 0 )
+               {
+                    $sql = "SELECT `achievements`.`id`,`achievements`.`titel`,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName
+                            FROM `achievements` LEFT JOIN `games` 
+                            ON `achievements`.gameId = `games`.id
+                            WHERE `games`.id = '%s'";
+                    $result =$database->query($sql,array($gameId));
+                    $array = $database->resultArray($result);
+                    return $array; 
+               }
+               elseif( $id >= 0)
+               {
+                    $sql = "SELECT `achievements`.`id`,`achievements`.`titel`,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName
+                            FROM `achievements` LEFT JOIN `games` 
+                            ON `achievements`.gameId = `games`.id
+                            WHERE `games`.id = '%s'";
+                    $result =$database->query($sql,array($id));
+                    $array = $database->resultArray($result);
+                    return $array;   
+               }
+           }
+            else 
+            {
+                $sql = "SELECT `achievements`.`id`,`achievements`.`titel`,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName
+                            FROM `achievements` LEFT JOIN `games` 
+                            ON `achievements`.gameId = `games`.id";
+                    $result =$database->query($sql,array());
+                    $array = $database->resultArray($result);
+                    return $array;  
+            }
        }
        
        /**
@@ -28,10 +67,14 @@
          * @param string $description
          * @param int $points 
          * @return int id
-         */
+         */                
        function insertAchievement($gameId, $titel, $description, $points)
        {
-           return 91;
+            $database = new Database();
+             $sql = "INSERT INTO `achievements` (`gameId`,`titel`,`description`,`points`) 
+                     VALUES('%s','%s','%s','%s')";
+             $result = $database->query($sql,array($gameId,$titel,$description,$points),true);
+             return $result;
        }
        
               /**
@@ -67,25 +110,83 @@
         */
        function insertAchievementUser($userId,$achievementId,$date)
        {
-           
+            $database = new Database();
+            $sql = "INSERT INTO `userachievements` (`userId`,`achievementId`,`dateOfAchieving`) 
+                    VALUES('%s','%s','%s')";
+            $result = $database->query($sql,array($userId,$achievementId,$date),true);
+            updateUser($userId,"",calculateUserScore($userId)); 
+            return;
        }
        
        /**
         * selects the achievements of a user
         * @param int $userId
-        * @param int $gameId 
-        * @return void
+        * @param int $gameId optional
+        * @return ARRAY
         */
        function selectAchievementUser($userId, $gameId) 
        {
-          
+            $database = new Database();
+            if($userId >= 0 && $gameId >= 0)
+            {    
+                $sql = "SELECT `achievements`.`id`,`achievements`.`titel`,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName
+                        FROM `achievements` 
+                        LEFT JOIN `userachievements` ON `achievements`.`id` = `userachievements`.`achievementId`
+                        LEFT JOIN `games` ON `achievements`.gameId = `games`.id
+                        WHERE `userachievements`.`userId` = '%s' AND `games`.`id` = '%s'";
+                $result =$database->query($sql,array($userId,$gameId));
+                $array = $database->resultArray($result);
+                return $array;
+            }
+            elseif($userId >= 0 || $gameId >= 0)
+            {
+                if($userId >= 0 )
+                {
+                    $sql = "SELECT `achievements`.`id`,`achievements`.`titel`,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName
+                            FROM `achievements` 
+                            LEFT JOIN `userachievements` ON `achievements`.`id` = `userachievements`.`achievementId`
+                            LEFT JOIN `games` ON `achievements`.gameId = `games`.id
+                            WHERE `userachievements`.`userId` = '%s'";
+                    $result =$database->query($sql,array($userId));
+                    $array = $database->resultArray($result);
+                    return $array;
+                }
+                elseif($gameId >= 0)
+                {
+                    $sql = "SELECT `achievements`.`id`,`achievements`.`titel`,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName
+                            FROM `achievements`                             
+                            LEFT JOIN `games` ON `achievements`.gameId = `games`.id
+                            WHERE `games`.`id` = '%s'";
+                    $result =$database->query($sql,array($gameId));
+                    $array = $database->resultArray($result);
+                    return $array;
+                }
+                
+            }
+            else 
+            {
+                $sql = "SELECT `achievements`.`id`,`achievements`.`titel`,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName
+                        FROM `achievements` LEFT JOIN `games` 
+                        ON `achievements`.gameId = `games`.id";
+                $result =$database->query($sql,array());
+                $array = $database->resultArray($result);
+                return $array; 
+            }
+
        }
        
-    class Achievement_Model// extends Database
-    {      
-        
-            
+       function achievementScore($id)
+       {
+           $userAchievements  = selectAchievementUser($id,-1);
+           
+           $score = 0;
+           
+           foreach($userAchievements as $achievement)
+           {
+               $score += $achievement['points'];
+           }
+           
+           return $score;
+       }
+       
 
-    }
-
-?>
