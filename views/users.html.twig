@@ -1,0 +1,28 @@
+{% autoescape false %}
+<h2 class="tableHeader">Overzicht gebruikers</h2>
+		  
+		  <table class="tableToSort">
+                    <thead>
+                        <th>Nickname</th>
+                        <th>Score</th>
+                        <th>Achievements</th>
+                        <th>Highscores</th>
+                    </thead>
+                      <tbody>
+                          {% for user in users %}
+                            {% if loop.index is even %}
+                                <tr class="even">
+                            {% elseif loop.index is odd %}
+                                <tr class="odd">  
+                            {% endif %}
+                                  <td> 
+                                      <a href="{{url}}/index.php/users/{{user.id}}">{{ user.nickname }}</a>
+                                  </td>
+                                  <td>{{ user.score }}</td>
+                                  <td>{{ user.achievements }}</td>
+                                  <td>{{ user.highscores}}</td>
+                              </tr>
+                          {% endfor %}
+                      </tbody>
+		  </table>{# empty Twig template #}
+{% endautoescape %}

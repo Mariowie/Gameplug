@@ -1,0 +1,20 @@
+ <h2 class="tableHeader">Overview achievements of {{game}}</h2>
+		  
+		  <table class="tableToSort">
+			<thead>                            
+                            <th>Name</th>
+                            <th>description</th>
+                            <th>Points worth</th>
+                            <th>No. times achieved</th>
+			</thead>
+                      <tbody>
+                          {% for achievement in achievements %}
+                          <tr class="even">                              
+                              <td>{{achievement.titel}}</td>
+                              <td>{{achievement.description}}</td>
+                              <td>{{achievement.points}}</td>
+                              <td>{{achievement.achieved}}</td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+		  </table>

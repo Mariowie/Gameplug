@@ -1,0 +1,22 @@
+ <h2 class="tableHeader">Overview games</h2>
+		  
+		  <table class="tableToSort">
+			<thead>
+                            <th>Name</th>
+                            <th>Highscore</th>
+                            <th>developer</th>
+                            <th>Number of achievements</th>
+                            <th>Releasedate</th>
+			</thead>
+                      <tbody>
+                          {% for game in games %}
+                          <tr class="even">
+                              <td>{{game.name}}</td>
+                              <td>{{game.highscore}}</td>
+                              <td>{{game.developer}}</td>
+                              <td>{{game.achievements}}</td>
+                              <td>{{game.releaseDate}}</td>
+                          </tr>
+                          {% endfor %}
+                      </tbody>
+		  </table>
