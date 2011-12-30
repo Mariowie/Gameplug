@@ -16,14 +16,38 @@
              $database = new Database();
             if($openId=="" && $id == -1)
                 {                   
-                    $sql =  "SELECT * FROM `users` ";                    
+                    $sql = "SELECT  `users`.`id` ,  `users`.`nickname` ,  `users`.`score` ,  `users`.`openId` , COALESCE(  `achievements`.`achievements` , 0 ) AS achievements, COALESCE(  `highscores`.`highscores` , 0 ) AS highscores
+                            FROM  `users` 
+                            LEFT JOIN (
+                                        SELECT COUNT( * ) AS achievements,  `userId` 
+                                        FROM  `userachievements` 
+                                        GROUP BY  `userid`
+                            ) AS  `achievements` ON  `achievements`.`userid` =  `users`.`id` 
+                            LEFT JOIN (
+                                        SELECT COUNT( * ) AS highscores,  `userid` 
+                                        FROM  `highscores` 
+                                        GROUP BY  `gameid`
+                            ) AS  `highscores` ON  `highscores`.`userid` =  `users`.`id` 
+                            ";                    
                     $result =$database->query($sql,array());
                     $array = $database->resultArray($result);
                     return $array;          
                 }
             elseif($openId != "" && $id >= 0)
                 {                   
-                    $sql =  "SELECT * FROM `users` where `openid` = '%s' AND `id` = '%s'";                    
+                    $sql = "SELECT  `users`.`id` ,  `users`.`nickname` ,  `users`.`score` ,  `users`.`openId` , COALESCE(  `achievements`.`achievements` , 0 ) AS achievements, COALESCE(  `highscores`.`highscores` , 0 ) AS highscores
+                            FROM  `users` 
+                            LEFT JOIN (
+                                        SELECT COUNT( * ) AS achievements,  `userId` 
+                                        FROM  `userachievements` 
+                                        GROUP BY  `userid`
+                            ) AS  `achievements` ON  `achievements`.`userid` =  `users`.`id` 
+                            LEFT JOIN (
+                                        SELECT COUNT( * ) AS highscores,  `userid` 
+                                        FROM  `highscores` 
+                                        GROUP BY  `gameid`
+                            ) AS  `highscores` ON  `highscores`.`userid` =  `users`.`id` 
+                            WHERE `users`.`openid` = '%s' AND `users`.`id` = '%s'";                    
                     $result =$database->query($sql,array($openId,$id));
                     $array = $database->resultArray($result);
                     return $array; 
@@ -32,14 +56,38 @@
                 {
                     if($openId !="" )
                     {
-                        $sql =  "SELECT * FROM `users` where `openid` = '%s'";                    
+                        $sql = "SELECT  `users`.`id` ,  `users`.`nickname` ,  `users`.`score` ,  `users`.`openId` , COALESCE(  `achievements`.`achievements` , 0 ) AS achievements, COALESCE(  `highscores`.`highscores` , 0 ) AS highscores
+                                FROM  `users` 
+                                LEFT JOIN (
+                                            SELECT COUNT( * ) AS achievements,  `userId` 
+                                            FROM  `userachievements` 
+                                            GROUP BY  `userid`
+                                ) AS  `achievements` ON  `achievements`.`userid` =  `users`.`id` 
+                                LEFT JOIN (
+                                            SELECT COUNT( * ) AS highscores,  `userid` 
+                                            FROM  `highscores` 
+                                            GROUP BY  `gameid`
+                                ) AS  `highscores` ON  `highscores`.`userid` =  `users`.`id`  
+                                WHERE `users`.`openid` = '%s'";                    
                         $result =$database->query($sql,array($openId));
                         $array = $database->resultArray($result);
                         return $array;  
                     }
                     elseif($id >= 0)
                     {
-                        $sql =  "SELECT * FROM `users` where `id` = '%s'";                    
+                        $sql = "SELECT  `users`.`id` ,  `users`.`nickname` ,  `users`.`score` ,  `users`.`openId` , COALESCE(  `achievements`.`achievements` , 0 ) AS achievements, COALESCE(  `highscores`.`highscores` , 0 ) AS highscores
+                                FROM  `users` 
+                                LEFT JOIN (
+                                            SELECT COUNT( * ) AS achievements,  `userId` 
+                                            FROM  `userachievements` 
+                                            GROUP BY  `userid`
+                                ) AS  `achievements` ON  `achievements`.`userid` =  `users`.`id` 
+                                LEFT JOIN (
+                                            SELECT COUNT( * ) AS highscores,  `userid` 
+                                            FROM  `highscores` 
+                                            GROUP BY  `gameid`
+                                ) AS  `highscores` ON  `highscores`.`userid` =  `users`.`id`  
+                                WHERE `users`.`id` = '%s'";                    
                         $result =$database->query($sql,array($id));
                         $array = $database->resultArray($result);
                         return $array; 

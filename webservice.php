@@ -24,6 +24,7 @@ $server->wsdl->addComplexType('Achievement','complexType','struct','all','',
 			'titel' => array('name' => 'titel','type' => 'xsd:string'),
 			'description' => array('name' => 'description','type' => 'xsd:string'),
 			'points' => array('name' => 'points','type' => 'xsd:int'),
+                        'achieved' => array('name' => 'points','type' => 'xsd:int'),
 		));
 // create an array of that new data type
 $server->wsdl->addComplexType('Achievements','complexType','array','','SOAP-ENC:Array',
@@ -36,7 +37,9 @@ $server->wsdl->addComplexType('Game','complexType','struct','all','',
 			'name' => array('name' => 'name','type' => 'xsd:string'),
 			'developer' => array('name' => 'developer','type' => 'xsd:string'),
 			'downloadUrl' => array('name' => 'downloadUrl','type' => 'xsd:string'),
-			'releaseDate' => array('name' => 'releaseDate','type' => 'xsd:int'),
+			'releaseDate' => array('name' => 'releaseDate','type' => 'xsd:string'),
+                        'highscore' => array('name' => 'highscore','type' => 'xsd:int'),
+                        'achievements' => array('name' => 'achievements','type' => 'xsd:int'),
 		));
 // create an array of that new data type
 $server->wsdl->addComplexType('Games','complexType','array','','SOAP-ENC:Array',
@@ -77,6 +80,8 @@ $server->wsdl->addComplexType('User','complexType','struct','all','',
 			'nickname' => array('name' => 'nickname','type' => 'xsd:string'),
 			'openId' => array('name' => 'openId','type' => 'xsd:string'),
 			'score' => array('name' => 'score','type' => 'xsd:int'),
+                        'achievements' =>array('name'=>'achievements','type'=>'xsd:int'),
+                        'highscores' =>array('name'=>'highscores','type'=>'xsd:int')
 		));
 // create an array of that new data type
 $server->wsdl->addComplexType('Users','complexType','array','','SOAP-ENC:Array',

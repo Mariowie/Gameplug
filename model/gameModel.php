@@ -39,8 +39,21 @@
          function selectGame($id,$name,$developer)
         {
              $database = new Database();
-             $sql = "SELECT `id`,`name`,`releaseDate`,`developer`,`downloadUrl`
-                     FROM `games`";
+             $sql = "SELECT `games`.`id`,`games`.`name`,`games`.`releaseDate`,`games`.`developer`,`games`.`downloadUrl`,COALESCE(  `highscore`.`score` , 0 ) AS score,
+                     COALESCE(  `achievements`.`achievements` , 0 ) AS achievements   
+                     FROM `games`
+                     LEFT JOIN (
+                                    SELECT `score`,  `gameId` 
+                                    FROM  `highscores`                                     
+                                    ORDER BY `score` DESC
+                                    LIMIT 0,1
+                                ) AS  `highscore` ON  `highscore`.`gameid` =  `games`.`id` 
+                    LEFT JOIN (
+                                    SELECT COUNT(*) AS `achievements`,  `gameId` 
+                                    FROM  `achievements`                                     
+                                    GROUP BY `gameId`
+                                ) AS  `achievements` ON  `achievements`.`gameId` =  `games`.`id` 
+                    ";
              $sql.=($id>=0 || $name !="" || $developer != "")?" WHERE ":"";
              $sql.=($id >= 0)?"`id` = '%s'":""; 
              $sql.=($id>=0 && ($name !="" || $database!=""))?" AND ":""; 

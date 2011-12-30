@@ -17,9 +17,15 @@
            $database = new Database();
            if($gameId>=0 && $id >= 0)
            {
-                $sql = "SELECT `achievements`.`id`,`achievements`.`titel`,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName
+                $sql = "SELECT `achievements`.`id`,`achievements`.`titel`,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName, COALESCE(userachievement.`times`,0) AS achieved
                        FROM `achievements` LEFT JOIN `games` 
                        ON `achievements`.gameId = `games`.id
+                       LEFT JOIN 
+                                (
+                                    SELECT COUNT(*) AS times,`achievementId`
+                                    FROM `userachievements`
+                                    GROUP BY `achievementId`
+                                ) AS userachievement ON userachievement.`achievementId` = `achievements`.`id`
                        WHERE `games`.id = '%s' AND `achievements`.id = '%s'";
                 $result =$database->query($sql,array($gameId,$id));
                 $array = $database->resultArray($result);

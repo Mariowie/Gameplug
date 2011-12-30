@@ -45,15 +45,15 @@
          function selectHighscore($gameId,$userId,$date)
         {
               $database = new Database();
-                $sql = "SELECT `games`.`name`,`users`.`nickname`,`highscores`.`score`,`highscores`.`date`
+                $sql = "SELECT `games`.`name` AS gameName,`users`.`nickname` AS userName,`highscores`.`score`,`highscores`.`date`
                         FROM `highscores`  
                         LEFT JOIN `games` ON `highscores`.`gameid` = `games`.`id`
                         LEFT JOIN `users` ON `highscores`.`userid` = `users`.`id`                     
                        ";
                 $sql.=($gameId>0||$userId > 0|| $date >0)?"WHERE":'';
-                $sql.=($gameId>0)?"`games`.`gameId` = '%s'":"";
+                $sql.=($gameId>0)?"`highscores`.`gameid` = '%s'":"";
                 $sql.=($gameId>0 && ($userId > 0 || $date >0))?"AND":"";
-                $sql.=($userId > 0)?"`users`.`userId` ='%s'":"";
+                $sql.=($userId > 0)?"`highscores`.`userId` ='%s'":"";
                 $sql.=($date>0 && $userId >0)?" AND `highscores`.`date` = '%s'":'';
                 $sql.=($date>0 && $userId <0)?" `highscores`.`date` = '%s'":'';
                 
@@ -62,6 +62,7 @@
                 ($userId > 0)?array_push($param, $userId ):'';
                 ($date>0)?array_push($param, $date):'';
                  $result = $database->resultArray($database->query($sql,$param));
+                 return $result;
         }
         
         /**
