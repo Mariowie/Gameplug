@@ -3,6 +3,7 @@
 		  
 		  <table class="tableToSort">
                     <thead>
+                        <th>Rank</th>
                         <th>Nickname</th>
                         <th>Score</th>
                         <th>Achievements</th>
@@ -15,6 +16,7 @@
                             {% elseif loop.index is odd %}
                                 <tr class="odd">  
                             {% endif %}
+                                    <td> # {{ user.rank }}</td>  
                                   <td> 
                                       <a href="{{url}}/index.php/users/{{user.id}}">{{ user.nickname }}</a>
                                   </td>

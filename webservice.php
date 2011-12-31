@@ -77,6 +77,7 @@ $server->wsdl->addComplexType('Hostedgames','complexType','array','','SOAP-ENC:A
 $server->wsdl->addComplexType('User','complexType','struct','all','',
 		array(
                         'id'    =>array('name'=>'id','type'=>'xsd:int'),
+                        'rank'    =>array('name'  =>  'id', 'type'    => 'xsd:int'),
 			'nickname' => array('name' => 'nickname','type' => 'xsd:string'),
 			'openId' => array('name' => 'openId','type' => 'xsd:string'),
 			'score' => array('name' => 'score','type' => 'xsd:int'),
