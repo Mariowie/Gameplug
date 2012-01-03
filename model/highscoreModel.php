@@ -23,8 +23,7 @@
             else
             {
                 $insertSql = "INSERT INTO `highscores`(`gameId`,`userId`,`date`,`score`) 
-                          VALUES('%s','%s','%s','%s')";
-                calculateUserScore($id);
+                          VALUES('%s','%s','%s','%s')";                
                  $result = $database->query($insertSql,array($gameId,$userId,$date,$score)); 
                  updateUser($userId,"",calculateUserScore($userId)); 
             }
@@ -42,20 +41,20 @@
          * @param timestamp $date 
          * @return array(highscore(game.name, user.name,score,date))
          */
-         function selectHighscore($gameId,$userId,$date)
+         function selectHighscores($gameId,$userId,$date)
         {
               $database = new Database();
-                $sql = "SELECT `games`.`name` AS gameName,`users`.`nickname` AS userName,`highscores`.`score`,`highscores`.`date`
+                $sql = "SELECT `games`.`name` AS gameName,`games`.`id` AS gameid,`users`.`id` AS userid,`users`.`nickname` AS userName,`highscores`.`score`,`highscores`.`date`
                         FROM `highscores`  
                         LEFT JOIN `games` ON `highscores`.`gameid` = `games`.`id`
                         LEFT JOIN `users` ON `highscores`.`userid` = `users`.`id`                     
                        ";
-                $sql.=($gameId>0||$userId > 0|| $date >0)?"WHERE":'';
+                $sql.=($gameId>0||$userId > 0|| $date !="")?" WHERE ":'';
                 $sql.=($gameId>0)?"`highscores`.`gameid` = '%s'":"";
-                $sql.=($gameId>0 && ($userId > 0 || $date >0))?"AND":"";
+                $sql.=($gameId>0 && ($userId > 0 || $date >0))?" AND ":"";
                 $sql.=($userId > 0)?"`highscores`.`userId` ='%s'":"";
-                $sql.=($date>0 && $userId >0)?" AND `highscores`.`date` = '%s'":'';
-                $sql.=($date>0 && $userId <0)?" `highscores`.`date` = '%s'":'';
+                $sql.=($date !="" && $userId >0)?" AND `highscores`.`date` = '%s'":'';
+                $sql.=($date !="" && $userId <0)?" `highscores`.`date` = '%s'":'';
                 
                 $param = array();
                 ($gameId>0)?array_push($param, $gameId):'';
@@ -102,7 +101,7 @@
          */     
         function getHighscoresUser($id)
         {
-             $games = selectGame(-1,"","");
+             $games = selectGames(-1,"","");
              
              $score = 0;
                

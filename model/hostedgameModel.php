@@ -58,10 +58,10 @@
          * 
          * @return  array(hostedGame(id,game.name,user.name,waitingForPlayers,amountOfPlayer,message,ipaddress))
          */        
-         function selectHostedGame($gameId,$userId,$id)
+         function selectHostedGames($gameId,$userId,$id)
         {
              $database = new Database();
-            $sql ="SELECT `hostedgames`.`id`,`games`.`name` AS 'gameName',`users`.`nickname` AS 'userName', `hostedgames`.`waitingForPlayers`,`hostedgames`.`amountOfPlayers`,`hostedgames`.`message`,`hostedgames`.`ip-address` AS 'ipaddress' 
+            $sql ="SELECT `hostedgames`.`id`,`games`.`name` AS 'gameName',`games`.`id` AS 'gameid',`users`.`nickname` AS 'userName',`users`.`id AS 'userid' ,`hostedgames`.`waitingForPlayers`,`hostedgames`.`amountOfPlayers`,`hostedgames`.`message`,`hostedgames`.`ip-address` AS 'ipaddress' 
                    FROM `hostedgames` 
                    LEFT JOIN `games` ON `hostedgames`.`gameid` = `games`.`id`
                    LEFT JOIN `users` ON `hostedgames`.`userid` = `users`.`id`";
