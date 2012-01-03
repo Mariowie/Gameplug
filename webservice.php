@@ -99,7 +99,7 @@ $server->register(
                 // method name:
                 'selectAchievements', 	
                 // parameter list:
-                array('gameId'=>'xsd:int','id'=>'xsd:int'), 
+                array('gameId'=>'xsd:int','id'=>'xsd:int','title'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'tns:Achievements'),
                 // namespace:
