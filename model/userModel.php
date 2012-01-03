@@ -124,9 +124,16 @@
          */
         function insertUser($openId,$nickname)
         {
-            $database = new Database();
-            $sql =  "INSERT INTO `users`(`nickname`,`openId`) VALUES('%s','%s');";
-            return $database->query($sql,array($nickname,$openId),true);                        
+            if(sizeof(selectUsers($openId,-1)))
+            {
+                $database = new Database();
+                $sql =  "INSERT INTO `users`(`nickname`,`openId`) VALUES('%s','%s');";
+                return $database->query($sql,array($nickname,$openId),true);   
+            }
+            else
+            {
+                return;
+            }
         }
         
         /**

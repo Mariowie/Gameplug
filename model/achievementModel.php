@@ -11,64 +11,11 @@
         * @param int $gameId
         * @param int $id 
         */
-       function selectAchievements($gameId,$id)
+       function selectAchievements($gameId,$id,$name)
        {
  
            $database = new Database();
-           if($gameId>=0 && $id >= 0)
-           {
-                $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName, COALESCE(userachievement.`times`,0) AS achieved
-                       FROM `achievements` LEFT JOIN `games` 
-                       ON `achievements`.gameId = `games`.id
-                       LEFT JOIN 
-                                (
-                                    SELECT COUNT(*) AS times,`achievementId`
-                                    FROM `userachievements`
-                                    GROUP BY `achievementId`
-                                ) AS userachievement ON userachievement.`achievementId` = `achievements`.`id`
-                       WHERE `games`.id = '%s' AND `achievements`.id = '%s'";
-                $result =$database->query($sql,array($gameId,$id));
-                $array = $database->resultArray($result);
-                return $array; 
-           }
-           elseif($gameId >= 0 || $id >= 0)
-           {
-               if($gameId >= 0 )
-               {
-                    $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName, COALESCE(userachievement.`times`,0) AS achieved
-                       FROM `achievements` LEFT JOIN `games` 
-                       ON `achievements`.gameId = `games`.id
-                       LEFT JOIN 
-                                (
-                                    SELECT COUNT(*) AS times,`achievementId`
-                                    FROM `userachievements`
-                                    GROUP BY `achievementId`
-                                ) AS userachievement ON userachievement.`achievementId` = `achievements`.`id`
-                       WHERE `games`.id = '%s'";
-                    $result =$database->query($sql,array($gameId));
-                    $array = $database->resultArray($result);
-                    return $array; 
-               }
-               elseif( $id >= 0)
-               {
-                    $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName, COALESCE(userachievement.`times`,0) AS achieved
-                            FROM `achievements` LEFT JOIN `games` 
-                            ON `achievements`.gameId = `games`.id
-                            LEFT JOIN 
-                                    (
-                                        SELECT COUNT(*) AS times,`achievementId`
-                                        FROM `userachievements`
-                                        GROUP BY `achievementId`
-                                    ) AS userachievement ON userachievement.`achievementId` = `achievements`.`id`
-                            WHERE `achievements`.id = '%s'";
-                    $result =$database->query($sql,array($id));
-                    $array = $database->resultArray($result);
-                    return $array;   
-               }
-           }
-            else 
-            {
-                $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName, COALESCE(userachievement.`times`,0) AS achieved
+           $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName, COALESCE(userachievement.`times`,0) AS achieved
                         FROM `achievements` LEFT JOIN `games` 
                         ON `achievements`.gameId = `games`.id
                         LEFT JOIN 
@@ -78,10 +25,20 @@
                                     GROUP BY `achievementId`
                                 ) AS userachievement ON userachievement.`achievementId` = `achievements`.`id`
                        ";
-                    $result =$database->query($sql,array());
-                    $array = $database->resultArray($result);
-                    return $array;  
-            }
+           $sql.= ($gameId >= 0 || $id >= 0 ||$name!="" )?" WHERE ":"";
+           $sql.= ($gameId >= 0 )?" `games`.id = '%s' ":"";
+           $sql.= ($gameId >= 0 && ( $id >= 0 ||$name!="" ))?" AND ":"";
+           $sql.= ($id >= 0 )?" `achievements`.id = '%s' ":"";
+           $sql.= ( $name !="" && $id >= 0 )?" AND ":"";
+           $sql.= ( $name !="" )?" `achievements`.`titel` = '%s' ":"";
+           
+           $param = array();
+           ($gameId >= 0)?array_push($param, $gameId):"";
+           ($id >= 0)?array_push($param, $id):"";
+           ($name !="")?array_push($param, $name):"";
+            $result =$database->query($sql,$param);
+            $array = $database->resultArray($result);
+            return $array;                                 
        }
        
        /**
@@ -95,11 +52,18 @@
          */                
        function insertAchievement($gameId, $titel, $description, $points)
        {
-            $database = new Database();
-             $sql = "INSERT INTO `achievements` (`gameId`,`titel`,`description`,`points`) 
-                     VALUES('%s','%s','%s','%s')";
-             $result = $database->query($sql,array($gameId,$titel,$description,$points),true);
-             return $result;
+            if(sizeof(selectAchievements($gameId,-1,$titel))==0)
+            {
+                $database = new Database();
+                 $sql = "INSERT INTO `achievements` (`gameId`,`titel`,`description`,`points`) 
+                         VALUES('%s','%s','%s','%s')";
+                 $result = $database->query($sql,array($gameId,$titel,$description,$points),true);
+                 return $result;
+            }
+             else 
+            {
+
+            }
        }
        
               /**

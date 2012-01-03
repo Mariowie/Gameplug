@@ -9,11 +9,18 @@
          */
          function insertGame($name,$releaseDate,$developer,$downloadUrl)
         {
-             $database = new Database();
-             $sql = "INSERT INTO `games` (`name`,`releaseDate`,`developer`,`downloadUrl`) 
+            if(sizeof(selectGames(-1,$name,$developer,-1))==0)
+            {
+                $database = new Database();
+                $sql = "INSERT INTO `games` (`name`,`releaseDate`,`developer`,`downloadUrl`) 
                      VALUES('%s','%s','%s','%s')";
-             $result = $database->query($sql,array($name,$releaseDate,$developer,$downloadUrl),true);
-             return $result;
+                $result = $database->query($sql,array($name,$releaseDate,$developer,$downloadUrl),true);
+                return $result;
+            }
+            else
+            {
+                return;
+            }
         }
 
         /**

@@ -17,7 +17,8 @@
          function insertHostedGame($userId, $gameId, $message,$waitingForPlayers,$amountOfPlayers,$ipAddress)
         {
              $database = new Database();
-            $sql = "INSERT INTO `hostedgames` (`userid`,`gameid`,`message`,`waitingForPlayers`,`amountOfPlayers`,`ip-address`) VALUES('%s','%s','%s','%s','%s','%s')";
+            $sql = "INSERT INTO `hostedgames` (`userid`,`gameid`,`message`,`waitingForPlayers`,`amountOfPlayers`,`ip-address`) 
+                    VALUES('%s','%s','%s','%s','%s','%s')";
             return $database->query($sql,array($userId, $gameId, $message,$waitingForPlayers,$amountOfPlayers,$ipAddress),true);
         }
         
@@ -33,7 +34,9 @@
         {
              
             $database = new Database();
-            $sql = "UPDATE `hostedgames` SET `message` = '%s',`waitingForPlayers` = '%s',`amountOfPlayers` ='%s' WHERE `id` ='%s'";
+            $sql = "UPDATE `hostedgames` 
+                    SET `message` = '%s',`waitingForPlayers` = '%s',`amountOfPlayers` ='%s' 
+                    WHERE `id` ='%s'";
             $database->query($sql,array($message,$waitingForPlayers,$amountOfPlayers,$id));
             
         }
