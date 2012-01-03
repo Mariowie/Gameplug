@@ -55,7 +55,7 @@ div.dataTables_length
 
 div.dataTables_wrapper
 {
-    width: 60%;
+    width: 90%;
     float: left;
     clear: both;
 }
@@ -63,6 +63,46 @@ div.dataTables_wrapper
 h2.tableHeader
 {
     float:  left;
-    clear:  both;
+    clear:  right;
     margin: 5px 0px;
+}
+
+td.ranking
+{
+    font-weight: 800;
+}
+
+
+td.userScore{text-align: right;}
+
+
+td.achievements,td.highscores,td.gameAchievements,td.achievementPoints,td.achievementAchieved,th.dateHeader
+{
+    text-align: center;
+}
+
+a.menuItem
+{
+    float: left;
+    clear: left;
+    border: 2px outset;
+    padding: 2px;
+    text-decoration: none;
+    width: 80%;
+    margin: 10px auto;
+    border-color: #C4C2ED;
+    background-color: #17EBB2;
+    text-align: center;
+
+}
+
+
+a.menuItem:hover,a.menuItem.active:hover
+{
+    background-color: #17BAEB;
+}
+
+a.menuItem.active
+{
+    background-color: #7885E3;
 }
