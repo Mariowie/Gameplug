@@ -16,13 +16,13 @@
                             {% elseif loop.index is odd %}
                                 <tr class="odd">  
                             {% endif %}
-                                    <td> # {{ user.rank }}</td>  
+                                    <td class="ranking"> #{{ user.rank }}</td>  
                                   <td> 
                                       <a href="{{url}}/index.php/users/{{user.id}}">{{ user.nickname }}</a>
                                   </td>
-                                  <td>{{ user.score }}</td>
-                                  <td>{{ user.achievements }}</td>
-                                  <td>{{ user.highscores}}</td>
+                                  <td class="userScore">{{ user.score }}</td>
+                                  <td class="achievements">{{ user.achievements }}</td>
+                                  <td class="highscores">{{ user.highscores}}</td>
                               </tr>
                           {% endfor %}
                       </tbody>

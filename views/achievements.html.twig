@@ -1,20 +1,30 @@
- <h2 class="tableHeader">Overview achievements of {{game}}</h2>
+ <h2 class="tableHeader">Overview achievements of {{subject.nickname}}</h2>
 		  
 		  <table class="tableToSort">
-			<thead>                            
+			<thead>  
+                            {% if subjectIsUser%}
+                                   <th>Game</th>
+                            {% endif%}
                             <th>Name</th>
-                            <th>description</th>
                             <th>Points worth</th>
                             <th>No. times achieved</th>
+                            {% if subjectIsUser%}
+                                   <th>Date achieved</th>
+                            {% endif%}
 			</thead>
                       <tbody>
                           {% for achievement in achievements %}
-                          <tr class="even">                              
-                              <td>{{achievement.titel}}</td>
-                              <td>{{achievement.description}}</td>
-                              <td>{{achievement.points}}</td>
-                              <td>{{achievement.achieved}}</td>
-                          </tr>
+                              <tr class="even">                 
+                                  {% if subjectIsUser%}
+                                    <td>{{achievement.gameName}}</td>
+                                  {% endif%}
+                                  <td>{{achievement.title}}</td>                                  
+                                  <td class="achievementPoints">{{achievement.points}}</td>
+                                  <td class="achievementAchieved">{{achievement.achieved}}</td>
+                                  {% if subjectIsUser%}
+                                    <td>{{achievement.date|date("h:i m/d/Y")}}</td>
+                                  {% endif%}
+                              </tr>
                           {% endfor %}
                       </tbody>
 		  </table>

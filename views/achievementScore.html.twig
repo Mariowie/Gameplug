@@ -1,0 +1,27 @@
+{% autoescape false %}
+<script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+        var dataScore = new google.visualization.DataTable();
+        dataScore.addColumn('string', 'Title');
+        dataScore.addColumn('number', 'Points');
+        dataScore.addColumn({type:'string', role:'tooltip'})
+        dataScore.addRows([
+        {% for achievement in listOfAchievements %}    
+          [ " {{achievement.title }} ", {{achievement.points}},"{{achievement.title }} - {{ achievement.description}}. score - {{ achievement.points }}"],
+        {% endfor %}   
+        ]);
+        var optionsScore = {
+          width: 500, height: 240,
+          title: 'Score for each achievement',         
+        };
+        var chartScore = new google.visualization.ColumnChart(document.getElementById('{{ chartScore }}'));
+        
+        
+
+        chartScore.draw(dataScore, optionsScore);
+      }
+</script>
+{% endautoescape %}

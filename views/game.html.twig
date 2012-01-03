@@ -1,1 +1,33 @@
-{# empty Twig template #}
+{% autoescape false %}
+
+{{ script }}
+<div class="userPage">
+
+    <div>
+        Game : <span class="game">{{ gameName }}</span>
+    </div>
+    <div>
+        Download : <a href="{{downloadUrl}}">Download link</a>
+    </div>
+    <div>
+        Developer : <span class="developer">{{ developer }}</span>
+    </div>
+    <div>
+        Highscore : <span class="highscore">{{ highscore }}</span>
+    </div>
+    <div>
+        Highscores : <span class="AmountOfhighscores">{{ AmountOfhighscores }}</span>
+    </div>
+    <div>
+        Achievements : <span class="achievements">{{ achievements }}</span>
+    </div>
+     <div>
+        Releasedate : <span class="releasedate">{{ releaseDate|date("h:i m/d/Y") }}</span>
+    </div>
+  
+    <div id="{{ chartAchieved }}"></div>
+    <div id="{{ chartScore }}"></div>
+    <div id="{{ highscoreChart }}"></div>
+
+</div>
+{% endautoescape %}

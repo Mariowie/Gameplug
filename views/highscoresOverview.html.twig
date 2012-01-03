@@ -1,0 +1,25 @@
+{% autoescape false %}
+<script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+        var dataHighscores = new google.visualization.DataTable();
+            dataHighscores.addColumn('number', 'Days');
+            dataHighscores.addColumn('number', 'Highscore');
+            
+            {% for highscore in listOfHighscores %}
+                dataHighscores.addRow([{{ (highscore.date|date("U") - releaseDate|date("U") )/ 86400 }},{{ highscore.score}}]);
+            {% endfor%}
+            
+    // Create and draw the visualization.
+    var chartHighscores = new google.visualization.ScatterChart(
+        document.getElementById('{{ highscoreChart }}'));
+        chartHighscores.draw(dataHighscores, {title: 'Highscore of users for {{ gameName }}',
+                      width: 600, height: 400,
+                      vAxis: {title: "Highscore", titleTextStyle: {color: "green"}},
+                      hAxis: {title: "Days since release {{gameName}}", titleTextStyle: {color: "green"}}}
+              );
+      }
+</script>
+{% endautoescape %}

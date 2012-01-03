@@ -5,17 +5,17 @@
                             <th>Name</th>
                             <th>Highscore</th>
                             <th>developer</th>
-                            <th>Number of achievements</th>
+                            <th>No. achievements</th>
                             <th>Releasedate</th>
 			</thead>
                       <tbody>
                           {% for game in games %}
                           <tr class="even">
-                              <td>{{game.name}}</td>
-                              <td>{{game.highscore}}</td>
-                              <td>{{game.developer}}</td>
-                              <td>{{game.achievements}}</td>
-                              <td>{{game.releaseDate}}</td>
+                              <td class="gameName" ><a href="{{ url}}/index.php/games/{{ game.id }}">{{game.name}}</td>
+                              <td class="gameHighscore" >{{game.highscore}}</td>
+                              <td class="gameDeveloper">{{game.developer}}</td>
+                              <td class="gameAchievements">{{game.achievements}}</td>
+                              <td class="gameReleasedate">{{game.releaseDate}}</td>
                           </tr>
                           {% endfor %}
                       </tbody>

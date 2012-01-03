@@ -8,12 +8,14 @@
 <!-- (en) Add your meta data here -->
 <!-- (de) Fuegen Sie hier ihre Meta-Daten ein -->
 <link href="{{ url }}/media/css/gameplug.css" rel="stylesheet" type="text/css"/>
+<link href="{{ url }}/media/css/demo_table.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" language="javascript" src="{{ url }}/media/js/jquery.js"></script>
 <script type="text/javascript" language="javascript" src="{{ url }}/media/js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" charset="utf-8">
         $(document).ready(function() {
                 $('.tableToSort').dataTable();
-        } );
+        } );        
 </script>
 <!--[if lte IE 7]>
 <link href="css/patches/patch_2col_left_13.css" rel="stylesheet" type="text/css" />
@@ -32,7 +34,7 @@
       <div id="topnav" role="contentinfo">
       
       </div>
-      <h1>{{ title }}</h1>
+      <a href="{{url}}/index.php"><h1>{{ title }}</h1></a>
       <span>{{ tagline }}</span>
     </div>
     <!-- begin: main navigation #nav -->
@@ -45,7 +47,8 @@
       <!-- begin: #col1 - first float column -->
       <div id="col1" role="complementary">
         <div id="col1_content" class="clearfix">
-
+            <a href="{{url}}/index.php/users" class="menuItem {{ users }}">users</a>
+            <a href="{{url}}/index.php/games" class="menuItem {{ games }}">games</a>
         </div>
       </div>
       <!-- end: #col1 -->

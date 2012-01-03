@@ -1,0 +1,26 @@
+{% autoescape false %}
+<h2 class="tableHeader">Overview highscores {{ subject.nickname }}</h2>
+		  
+		  <table class="tableToSort">
+                    <thead>
+                        <th>Game</th>
+                        <th>Points</th>
+                        <th class="dateHeader">Date of highscore</th>
+                    </thead>
+                      <tbody>
+                          {% for highscore in highscores %}
+                            {% if loop.index is even %}
+                                <tr class="even">
+                            {% elseif loop.index is odd %}
+                                <tr class="odd">  
+                            {% endif %}                                   
+                                  <td> 
+                                      <a href="{{url}}/index.php/games/{{highscore.gameid}}">{{ highscore.gameName }}</a>
+                                  </td>
+                                  <td class="userScore">{{ highscore.score }}</td>
+                                  <td class="achievements">{{ highscore.date|date("h:i m/d/Y") }}</td>
+                              </tr>
+                          {% endfor %}
+                      </tbody>
+		  </table>{# empty Twig template #}
+{% endautoescape %}

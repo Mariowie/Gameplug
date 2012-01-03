@@ -1,0 +1,26 @@
+{% autoescape false %}
+<script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var dataAchieved = new google.visualization.DataTable();
+        dataAchieved.addColumn('string', 'Title');
+        dataAchieved.addColumn('number', 'No.Times achieved');      
+        dataAchieved.addColumn({type:'string', role:'tooltip'})
+        dataAchieved.addRows([
+        {% for achievement in listOfAchievements %}    
+          [ " {{achievement.title }} ", {{achievement.achieved}},"{{achievement.title }} - {{ achievement.description}}. score - {{ achievement.points }}"],
+        {% endfor %}   
+        ]);
+
+        var optionsAchieved = {
+          width: 500, height: 240,
+          title: 'Number of times an achievement has been achieved',         
+          colors:['red','#004411','purple','#CD46E8'],
+        };        
+
+        var chartAchieved = new google.visualization.ColumnChart(document.getElementById('{{chartAchieved}}'));      
+        chartAchieved.draw(dataAchieved, optionsAchieved);
+      }
+</script>
+{% endautoescape  %}

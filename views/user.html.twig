@@ -1,3 +1,4 @@
+{% autoescape false %}
 <div class="userPage">
 
     <div>
@@ -7,9 +8,13 @@
         Score : <span class="score">{{ score }}</span>
     </div>
     <div>
-        Ranking : <span class="nickName">#{{nickname }}</span>
+        Ranking : <span class="nickName">#{{ranking }}</span>
     </div>
     <div>
-        User : <span class="nickName">{{nickname }}</span>
+        Highscores : <span class="nickName">{{highscore }}</span>
     </div>
+    
+    {{ listOfHighscores }}
+    {{ listOfAchievements }}
 </div>
+{% endautoescape %}
