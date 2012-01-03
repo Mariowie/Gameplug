@@ -4,37 +4,56 @@
     $website = new website();
    define('url',"http://".$_SERVER['SERVER_NAME'].'/gameplug');
     
-    $url = explode("/", str_replace("gameplug/index.php/", "", $_SERVER["REQUEST_URI"]));
-        
+    $url = explode("/", str_replace("gameplug/index.php/", "", $_SERVER["REQUEST_URI"]));    
     if(isset($url[1]))
     {
         if($url[1] == "users")
         {
             if(!isset($url[2]))
             {
-                
+                return $website->users();
             }
             elseif (isset($url[2])) 
             {
                 $url[2] = $url[2] + 0;
                 if(is_int($url[2]))
                 {
-                    $website->users($url[2]);
+                    return $website->users($url[2]);
                 }
                 else
                 {
-                    $website->users();
+                    return $website->users();
                 }
             }
         }
         elseif ($url[1] == "games") 
         {
-            $website->games();
+            if(!isset($url[2]))
+            {
+                return $website->games();
+            }
+            elseif (isset($url[2])) 
+            {
+                $url[2] = $url[2] + 0;
+                if(is_int($url[2]))
+                {
+                    return $website->games($url[2]);
+                }
+                else
+                {
+                    return $website->games();
+                }
+            }
         }
+        elseif ($url[1]=="") 
+        {
+            return $website->users();
+        }
+         return $website->users();
     }
     else 
     {
-        $website->users();
+        return $website->users();
     }
 
     class website
@@ -61,54 +80,50 @@
         public function users($id='all')
         {
             $id= ($id == 'all')?-1:$id;
-            $users = $this->client->selectUsers("",$id);
-            //echo sizeof($users);
+            $userRequest = $this->client->selectUsers("",$id);
+            $users = (sizeof($userRequest)==0)?$this->client->selectUsers("",-1):$userRequest;
+            $id = (sizeof($userRequest)==0)?-1:$id;
             $content = "";
             if($id >=0)
             {
                 
+                $highscores = $this->client->selectHighscores(-1,$id,"");
+                $highscoreTemplate = $this->twig->render('highscores.html.twig',
+                                                            array(
+                                                                    'highscores'=>$highscores,
+                                                                    'subject' =>$users[0],
+                                                                    'url'=>url
+                                                                ));
+                $achievements = $this->client->selectAchievementsUser($id,-2);
+                $achievementsTemplate = $this->twig->render('achievements.html.twig',
+                                                            array(
+                                                                    'achievements'=>$achievements,
+                                                                    'subject' =>$users[0],
+                                                                    'url'=>url,
+                                                                    'subjectIsUser'=>true
+                                                                ));
+                $content = $this->twig->render('user.html.twig',
+                                array(
+                                        'nickname'=>$users[0]->nickname,
+                                        'ranking'=>$users[0]->rank,
+                                        'score'=>$users[0]->score,
+                                        'highscore'=>sizeof($highscores),
+                                        'listOfHighscores' => $highscoreTemplate,
+                                        'listOfAchievements' => $achievementsTemplate,
+                                       
+                                        
+                                            
+                        ));
             }
             else 
             {
                 $content = $this->twig->render('users.html.twig',array('url'=>url,'users'=>$users));
             }
             echo $this->twig->render('index.html.twig',array('url'=>url,'title'=>'Gameplug','tagline'=>'',
-                'content'=>$content));
+                'content'=>$content, 'users' => 'active',
+                                        'games' => 'inactive',));
         }
         
-        /**
-         * Makes a page showing all of the games the user has
-         * highscore / achievements of. Or show only detailed info
-         * of one game that the user has played.
-         * @param int $id
-         * @param int $game 
-         */
-        public function userGames($id,$game='all')
-        {
-            
-        }
-        
-        /**
-         * Makes a page showing all of the highscore the user has
-         * from one game
-         * @param int $id
-         * @param int $game 
-         */
-        public function userGameHighscores($id,$game)
-        {
-            
-        }
-        
-        /**
-         * Makes a page showing all of the achievements the user has
-         * from one game
-         * @param in $id
-         * @param int $game 
-         */
-        public function userGameAchievement($id,$game)
-        {
-            
-        }
         
         /**
          * Makes a page showing all registered games from the database,
@@ -118,11 +133,37 @@
         public function games($id='all')
         {
             $id= ($id == 'all')?-1:$id;
-            $games = $this->client->selectGame(-1,"","");
-            //echo sizeof($users);
+            $gameRequest = $this->client->selectGames($id,"","",-1);    
+            $id = (sizeof($gameRequest)<=0)?-1:$id;
+            $games = (sizeof($gameRequest)<=0)?$this->client->selectGames($id,"","",-1):$gameRequest;
             $content = "";
             if($id >=0)
             {
+                $highscores = $this->client->selectHighscores($id,-1,"");
+                $achievements = $this->client->selectAchievements($id,-1);   
+                $achievementsAchieved = $this->twig->render('achievementAchieved.html.twig',array('listOfAchievements'=>$achievements,'chartAchieved'=>'achievedChar'));
+                $achievementsScore = $this->twig->render('achievementScore.html.twig',array('listOfAchievements'=>$achievements,'chartScore'=>'scoreChar'));
+                $highscoresTemplate = $this->twig->render('highscoresOverview.html.twig',array(
+                                                            'releaseDate' => $games[0]->releaseDate,
+                                                            'listOfHighscores'=>$highscores,
+                                                                'highscoreChart'=>'highscoreChart','gameName'=>$games[0]->name,));
+                $content = $this->twig->render('game.html.twig',
+                                array(
+                                        'gameName'=>$games[0]->name,
+                                        'downloadUrl'=>$games[0]->downloadUrl,
+                                        'highscore'=>$games[0]->highscore,
+                                        'releaseDate' => $games[0]->releaseDate,
+                                        'AmountOfhighscores' => sizeof($highscores),
+                                        'achievements'=>$games[0]->achievements,
+                                        'listOfAchievements'=>$achievements,
+                                        'listOfHighscores'=>$highscores,
+                                        'developer'=>$games[0]->developer,
+                                        'chartAchieved'=>'achievedChar',
+                                        'chartScore'=>'scoreChar',
+                                        'highscoreChart'=>'highscoreChart',
+                                        'script'=>$achievementsAchieved.$achievementsScore.$highscoresTemplate 
+                                )
+                        );
                 
             }
             else 
@@ -130,28 +171,9 @@
                 $content = $this->twig->render('games.html.twig',array('url'=>url,'games'=>$games));
             }
             echo $this->twig->render('index.html.twig',array('url'=>url,'title'=>'Gameplug','tagline'=>'',
-                'content'=>$content)); 
-        }
-        
-        /**
-         * Makes a page showing all of the available achievements from 
-         * a single game.
-         * @param int $id 
-         */
-        public function gameAchievements($id)
-        {
-            
-        }
-        
-        /**
-         * Makes a page showing all of the highscores from 
-         * a single game.
-         * @param int $id 
-         */
-        public function gameHighscores($id)
-        {
-            
-        }
+                'content'=>$content, 'users' => 'inactive',
+                                        'games' => 'active',)); 
+        }       
     }
 
 ?>
