@@ -19,7 +19,8 @@
             }
             else
             {
-                return;
+                $result = selectGames(-1,$name,$developer,-1);
+                return $result[0]['id'];
             }
         }
 
