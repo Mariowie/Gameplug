@@ -124,7 +124,7 @@
          */
         function insertUser($openId,$nickname)
         {
-            if(sizeof(selectUsers($openId,-1)))
+            if(sizeof(selectUsers($openId,-1))==0)
             {
                 $database = new Database();
                 $sql =  "INSERT INTO `users`(`nickname`,`openId`) VALUES('%s','%s');";
