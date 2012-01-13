@@ -61,25 +61,27 @@
          * 
          * @return  array(hostedGame(id,game.name,user.name,waitingForPlayers,amountOfPlayer,message,ipaddress))
          */        
-         function selectHostedGames($gameId,$userId,$id)
+         function selectHostedGames($gameName,$author,$userId,$id)
         {
              $database = new Database();
             $sql ="SELECT `hostedgames`.`id`,`games`.`name` AS 'gameName',`games`.`id` AS 'gameid',`users`.`nickname` AS 'userName',`users`.`id AS 'userid' ,`hostedgames`.`waitingForPlayers`,`hostedgames`.`amountOfPlayers`,`hostedgames`.`message`,`hostedgames`.`ip-address` AS 'ipaddress' 
                    FROM `hostedgames` 
                    LEFT JOIN `games` ON `hostedgames`.`gameid` = `games`.`id`
                    LEFT JOIN `users` ON `hostedgames`.`userid` = `users`.`id`";
-           $sql.=($gameId>0||$userId > 0|| $id >0)?"WHERE":'';
+           $sql.=($gameName!=""||$userId > 0|| $id >0 || $author !="")?"WHERE":'';
            $sql.=($id>=0)?"`hostedgames`.`id`='%s'":"";
-           $sql.=($id >= 0 && ($gameId >= 0 || $userId >= 0) )?" AND":"";
-           $sql.=($gameId >= 0)?"`games`.`id` = '%s'":"";
-           $sql.=($userId>0 && $gameId >=0)?" AND `users`.`id` = '%s'":'';
-           $sql.=($userId>0 && $gameId < 0)?" `users`.`id` = '%s'":'';
-           
+           $sql.=($id >= 0 && ($gameName != "" || $userId >= 0 || $author !="") )?" AND":"";
+           $sql.=($gameId != "")?"`games`.`name` = '%s'":"";
+           $sql.=($userId>0 && $gameId >=0)?" AND'":'';
+           $sql.=($userId>0 )?" `users`.`id` = '%s'":'';
+		   $sql.=($author!="" && $userId > 0)?" AND ":"";
+           $sql.=($author!="")?" `games`.`developer` = '%s'":"";
+		   
            $param = array();
            ($id>0)?array_push($param, $id):'';
-           ($gameId > 0)?array_push($param, $gameId ):'';
+           ($gameName != "")?array_push($param, $gameName ):'';
            ($userId>0)?array_push($param, $userId):'';
-           
+           ($author!="")?array_push($param, $author):'';
            return $database->resultArray($database->query($sql,$param));
         }
         

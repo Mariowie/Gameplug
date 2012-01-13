@@ -388,7 +388,7 @@ $server->register(
                 // method name:
                 'selectHostedgames', 	
                 // parameter list:
-                array('gameId'=>'xsd:int','userId'=>'xsd:int','id'=>'xsd:int'), 
+                array('gameName'=>'xsd:string','gameAuthor'=>'xsd:string','userId'=>'xsd:int','id'=>'xsd:int'), 
                 // return value(s):
                 array('return'=>'tns:Hostedgames'),
                 // namespace:
