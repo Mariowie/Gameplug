@@ -71,7 +71,7 @@ $server->wsdl->addComplexType('Hostedgame','complexType','struct','all','',
                         'userName' => array('name' => 'userName','type' => 'xsd:string'),
                         'userid'    =>array('name'  =>  'userid', 'type'    => 'xsd:int'),
 			'waitingForPlayers' => array('name' => 'waitingForPlayers','type' => 'xsd:boolean'),
-			'amountOfPlayer' => array('name' => 'amountOfPlayer','type' => 'xsd:int'),
+			'amountOfPlayers' => array('name' => 'amountOfPlayers','type' => 'xsd:int'),
                         'message' => array('name' => 'message','type' => 'xsd:string'),
                         'ipaddress' => array('name' => 'ipaddress','type' => 'xsd:string'),
 		));
