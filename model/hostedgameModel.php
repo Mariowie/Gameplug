@@ -64,17 +64,24 @@
          function selectHostedGames($gameName,$author,$userId,$id)
         {
              $database = new Database();
-            $sql ="SELECT `hostedgames`.`id`,`games`.`name` AS 'gameName',`games`.`id` AS 'gameid',`users`.`nickname` AS 'userName',`users`.`id AS 'userid' ,`hostedgames`.`waitingForPlayers`,`hostedgames`.`amountOfPlayers`,`hostedgames`.`message`,`hostedgames`.`ip-address` AS 'ipaddress' 
+            $sql ="SELECT `hostedgames`.`id`,`games`.`name` AS 'gameName',
+							`games`.`id` AS 'gameid',
+							`users`.`nickname` AS 'userName',
+							`users`.`id` AS 'userid' ,
+							`hostedgames`.`waitingForPlayers`,
+							`hostedgames`.`amountOfPlayers`,
+							`hostedgames`.`message`,
+							`hostedgames`.`ip-address` AS 'ipaddress' 
                    FROM `hostedgames` 
                    LEFT JOIN `games` ON `hostedgames`.`gameid` = `games`.`id`
                    LEFT JOIN `users` ON `hostedgames`.`userid` = `users`.`id`";
-           $sql.=($gameName!=""||$userId > 0|| $id >0 || $author !="")?"WHERE":'';
+           $sql.=($gameName!=""||$userId > 0|| $id >0 || $author !="")?" WHERE":'';
            $sql.=($id>=0)?"`hostedgames`.`id`='%s'":"";
-           $sql.=($id >= 0 && ($gameName != "" || $userId >= 0 || $author !="") )?" AND":"";
-           $sql.=($gameId != "")?"`games`.`name` = '%s'":"";
-           $sql.=($userId>0 && $gameId >=0)?" AND'":'';
+           $sql.=($gameName !="" && ($id >0) )?" AND":"";
+           $sql.=($gameName != "")?"`games`.`name` = '%s'":"";
+           $sql.=($userId>0 && ($gameName > 0 || $id))?" AND'":'';
            $sql.=($userId>0 )?" `users`.`id` = '%s'":'';
-		   $sql.=($author!="" && $userId > 0)?" AND ":"";
+		   $sql.=($author!="" && ($gameName > 0 || $id) || $userId)?" AND ":"";
            $sql.=($author!="")?" `games`.`developer` = '%s'":"";
 		   
            $param = array();
