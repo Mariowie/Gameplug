@@ -14,12 +14,12 @@
          * @param string $ipAddress 
          * @return id
          */
-         function insertHostedGame($userId, $gameId, $message,$waitingForPlayers,$amountOfPlayers,$ipAddress)
+         function insertHostedGame($userId, $gameId, $message,$waitingForPlayers,$amountOfPlayers,$maxplayers,$ipAddress)
         {
              $database = new Database();
-            $sql = "INSERT INTO `hostedgames` (`userid`,`gameid`,`message`,`waitingForPlayers`,`amountOfPlayers`,`ip-address`) 
+            $sql = "INSERT INTO `hostedgames` (`userid`,`gameid`,`message`,`waitingForPlayers`,`amountOfPlayers`,`maxplayers`,`ip-address`) 
                     VALUES('%s','%s','%s','%s','%s','%s')";
-            return $database->query($sql,array($userId, $gameId, $message,$waitingForPlayers,$amountOfPlayers,$ipAddress),true);
+            return $database->query($sql,array($userId, $gameId, $message,$waitingForPlayers,$amountOfPlayers,$maxplayers,$ipAddress),true);
         }
         
         /**
@@ -71,6 +71,7 @@
 							`hostedgames`.`waitingForPlayers`,
 							`hostedgames`.`amountOfPlayers`,
 							`hostedgames`.`message`,
+                                                        `hostedgames`.`maxplayers`,
 							`hostedgames`.`ip-address` AS 'ipaddress' 
                    FROM `hostedgames` 
                    LEFT JOIN `games` ON `hostedgames`.`gameid` = `games`.`id`
