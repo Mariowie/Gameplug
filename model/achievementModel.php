@@ -50,14 +50,14 @@
          * @param int $points 
          * @return int id
          */                
-       function insertAchievement($gameId, $titel, $description, $points)
+       function insertAchievement($id,$gameId, $titel, $description, $points)
        {
             if(sizeof(selectAchievements($gameId,-1,$titel))==0)
             {
                 $database = new Database();
-                 $sql = "INSERT INTO `achievements` (`gameId`,`titel`,`description`,`points`) 
+                 $sql = "INSERT INTO `achievements` (`id`,`gameId`,`titel`,`description`,`points`) 
                          VALUES('%s','%s','%s','%s')";
-                 $result = $database->query($sql,array($gameId,$titel,$description,$points),true);
+                 $result = $database->query($sql,array($id,$gameId,$titel,$description,$points),true);
                  return $result;
             }
              else 
@@ -97,7 +97,7 @@
         * @param timestamp $date
         * @return void
         */
-       function insertAchievementUser($userId,$achievementId,$date)
+       function insertAchievementUser($userId,$achievementId,$gameId,$date)
        {
             $database = new Database();
             $sql = "INSERT INTO `userachievements` (`userId`,`achievementId`,`dateOfAchieving`) 
