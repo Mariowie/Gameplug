@@ -73,6 +73,7 @@ $server->wsdl->addComplexType('Hostedgame','complexType','struct','all','',
 			'waitingForPlayers' => array('name' => 'waitingForPlayers','type' => 'xsd:boolean'),
 			'amountOfPlayers' => array('name' => 'amountOfPlayers','type' => 'xsd:int'),
                         'message' => array('name' => 'message','type' => 'xsd:string'),
+                        'maxplayers' => array('name' => 'message','type' => 'xsd:int'),
                         'ipaddress' => array('name' => 'ipaddress','type' => 'xsd:string'),
 		));
 // create an array of that new data type
@@ -117,7 +118,7 @@ $server->register(
                 // method name:
                 'insertAchievement', 	
                 // parameter list:
-                array('gameId'=>'xsd:int','title'=>'xsd:string','description'=>'xsd:string','points'=>'xsd:int'), 
+                array('id'=>'xsd:int','gameId'=>'xsd:int','title'=>'xsd:string','description'=>'xsd:string','points'=>'xsd:int'), 
                 // return value(s):
                 array('return'=>'xsd:int'),
                 // namespace:
@@ -170,7 +171,7 @@ $server->register(
                 // method name:
                 'insertAchievementUser', 	
                 // parameter list:
-                array('userId'=>'xsd:int','achievementId'=>'xsd:int','date'=>'xsd:string'), 
+                array('userId'=>'xsd:int','achievementId'=>'xsd:int','gameId'=>'xsd:int','date'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'xsd:void'),
                 // namespace:
@@ -334,7 +335,7 @@ $server->register(
                 // method name:
                 'insertHostedgame', 	
                 // parameter list:
-                array('userId'=>'xsd:int','gameId'=>'xsd:int','message'=>'xsd:string','waitingForPlayers'=>'xsd:boolean','amountOfPlayers'=>'xsd:int','ipAddress'=>'xsd:string'), 
+                array('userId'=>'xsd:int','gameId'=>'xsd:int','message'=>'xsd:string','waitingForPlayers'=>'xsd:boolean','amountOfPlayers'=>'xsd:int','maxplayers'=>'xsd:int','ipAddress'=>'xsd:string'), 
                 // return value(s):
                 array('id'=>'xsd:int'),
                 // namespace:
