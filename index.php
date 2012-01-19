@@ -144,7 +144,7 @@
             if($id !="")
             {
                 $highscores = $this->client->selectHighscores($id,-1,"");
-                $achievements = $this->client->selectAchievements($id,-1,-1); 
+                $achievements = $this->client->selectAchievements($id,-1,""); 
                 var_dump($achievements);
                 $achievementsAchieved = $this->twig->render('achievementAchieved.html.twig',array('listOfAchievements'=>$achievements,'chartAchieved'=>'achievedChar'));
                 $achievementsScore = $this->twig->render('achievementScore.html.twig',array('listOfAchievements'=>$achievements,'chartScore'=>'scoreChar'));
