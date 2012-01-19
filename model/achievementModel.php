@@ -11,9 +11,11 @@
         * @param int $gameId
         * @param int $id 
         */
-       function selectAchievements($gameId,$id,$name)
+       function selectAchievements($gameName,$id,$name)
        {
- 
+            $gameId = selectGames(-1,$gameName,"",-1);
+            $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
+            
            $database = new Database();
            $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName, COALESCE(userachievement.`times`,0) AS achieved
                         FROM `achievements` LEFT JOIN `games` 
@@ -50,13 +52,15 @@
          * @param int $points 
          * @return int id
          */                
-       function insertAchievement($id,$gameId, $titel, $description, $points)
+       function insertAchievement($id,$gameName, $titel, $description, $points)
        {
-            if(sizeof(selectAchievements($gameId,-1,$titel))==0)
+            $gameId = selectGames(-1,$gameName,"",-1);
+                $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
+            if(sizeof(selectAchievements($gameName,-1,$titel))==0)
             {
                 $database = new Database();
                  $sql = "INSERT INTO `achievements` (`id`,`gameId`,`titel`,`description`,`points`) 
-                         VALUES('%s','%s','%s','%s')";
+                         VALUES('%s','%s','%s','%s','%s')";
                  $result = $database->query($sql,array($id,$gameId,$titel,$description,$points),true);
                  return $result;
             }
@@ -75,7 +79,7 @@
         * @param int $points
         * @return void
         */
-       function updateAchievement($id,$gameId,$title,$description,$points)
+       function updateAchievement($id,$gameName,$title,$description,$points)
        {
            
        }
@@ -97,12 +101,15 @@
         * @param timestamp $date
         * @return void
         */
-       function insertAchievementUser($userId,$achievementId,$gameId,$date)
+       function insertAchievementUser($userId,$achievementId,$gameName,$date)
        {
+           $dateNew = date("d-m-Y h:i:s", strtotime($date));       
+            $gameId = selectGames(-1,$gameName,"",-1);
+                $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
             $database = new Database();
-            $sql = "INSERT INTO `userachievements` (`userId`,`achievementId`,`dateOfAchieving`) 
-                    VALUES('%s','%s','%s')";
-            $result = $database->query($sql,array($userId,$achievementId,$date),true);
+            $sql = "INSERT INTO `userachievements` (`userId`,`achievementId`,`gameid`,`dateOfAchieving`) 
+                    VALUES('%s','%s','%s','%s')";
+            $result = $database->query($sql,array($userId,$achievementId,$gameId,$dateNew),true);
             updateUser($userId,"",calculateUserScore($userId)); 
             return;
        }
@@ -113,9 +120,11 @@
         * @param int $gameId optional
         * @return ARRAY
         */
-       function selectAchievementsUser($userId, $gameId) 
+       function selectAchievementsUser($userId, $gameName) 
        {
             $database = new Database();
+            $gameId = selectGames(-1,$gameName,"",-1);
+                $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
             if($userId >= 0 && $gameId >= 0)
             {    
                 $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId

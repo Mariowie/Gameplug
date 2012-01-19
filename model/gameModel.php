@@ -65,11 +65,11 @@
                                     SELECT `userId`,`achievementId`
                                     FROM  `userachievements`
                                 ) AS `userachievements` ON `userachievements`.`achievementId` = `achievements`.`id`
-                    ";
-             $sql.=($id>=0 || $name !="" || $developer != "" || $user >=0)?" WHERE ":"";
+                    ";             
+             $sql.=($id >= 0 || $name !="" || $developer != "" || $user >=0)?" WHERE ":"";
              $sql.=($id >= 0)?"`games`.`id` = '%s'":""; 
-             $sql.=($id>=0 && $name !="")?" AND ":""; 
-             $sql.=($name != "")?"`games`.`name`LIKE '%s'":"";
+             $sql.=($id >= 0 && $name !="")?" AND ":""; 
+             $sql.=($name != "")?"`games`.`name`= '%s'":"";
              $sql.=($developer!="" &&($name != ""|| $id >= 0))?" AND":"";
              $sql.=($developer !="")?"`games`.`developer` LIKE '%s'":"";
              $sql.=($user >=0 &&($id>=0 || $name !="" || $developer != ""))?" AND ":"";

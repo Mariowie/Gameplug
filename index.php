@@ -34,8 +34,8 @@
             }
             elseif (isset($url[2])) 
             {
-                $url[2] = $url[2] + 0;
-                if(is_int($url[2]))
+                $url[2] = $url[2];
+                if(is_string($url[2]))
                 {
                     return $website->games($url[2]);
                 }
@@ -132,15 +132,20 @@
          */
         public function games($id='all')
         {
+
             $id= ($id == 'all')?-1:$id;
-            $gameRequest = $this->client->selectGames($id,"","",-1);    
-            $id = (sizeof($gameRequest)<=0)?-1:$id;
-            $games = (sizeof($gameRequest)<=0)?$this->client->selectGames($id,"","",-1):$gameRequest;
+            
+            $gameRequest = $this->client->selectGames(-1,$id,"",-1); 
+            
+            $id = (sizeof($gameRequest)<=0)?"":$id;
+            
+            $games = (sizeof($gameRequest)<=0)?$this->client->selectGames(-1,$id,"",-1):$gameRequest;
             $content = "";
-            if($id >=0)
+            if($id !="")
             {
                 $highscores = $this->client->selectHighscores($id,-1,"");
-                $achievements = $this->client->selectAchievements($id,-1);   
+                $achievements = $this->client->selectAchievements($id,-1,-1); 
+                var_dump($achievements);
                 $achievementsAchieved = $this->twig->render('achievementAchieved.html.twig',array('listOfAchievements'=>$achievements,'chartAchieved'=>'achievedChar'));
                 $achievementsScore = $this->twig->render('achievementScore.html.twig',array('listOfAchievements'=>$achievements,'chartScore'=>'scoreChar'));
                 $highscoresTemplate = $this->twig->render('highscoresOverview.html.twig',array(

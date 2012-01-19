@@ -12,8 +12,10 @@
          * @param Timestamp $date 
          * @return void
          */
-         function insertHighscore($gameId,$userId,$score,$date)
+         function insertHighscore($gameName,$userId,$score,$date)
         {
+            $gameId = selectGames(-1,$gameName,"",-1);
+            $gameId = $gameId[0]->id;
             $database = new Database();            
             $currentHighscore = getHighestScore($gameId, $userId);
             if($currentHighscore >= $score)
@@ -41,8 +43,11 @@
          * @param timestamp $date 
          * @return array(highscore(game.name, user.name,score,date))
          */
-         function selectHighscores($gameId,$userId,$date)
+         function selectHighscores($gameName,$userId,$date)
         {
+                $gameId = selectGames(-1,$gameName,"",-1);
+                $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
+                
               $database = new Database();
                 $sql = "SELECT `games`.`name` AS gameName,`games`.`id` AS gameid,`users`.`id` AS userid,`users`.`nickname` AS userName,`highscores`.`score`,`highscores`.`date`
                         FROM `highscores`  
@@ -70,10 +75,8 @@
          * @param int $userId 
          * @return void
          */
-         function deleteHighscore($gameId,$userId)
+         function deleteHighscore($gameName,$userId)
         {
-            echo achievementScore($userId);
-            echo getHighscoresUser($userId);
         }
         
         /**
@@ -82,8 +85,10 @@
          * @param int $userId
          * @return int 
          */
-        function getHighestScore($gameId, $userId)
+        function getHighestScore($gameName, $userId)
         {
+             $gameId = selectGames(-1,$gameName,"",-1);
+                $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
             $database = new Database();
             $highestSql = "SELECT `score`
                            FROM `highscores`                        
@@ -101,7 +106,7 @@
          */     
         function getHighscoresUser($id)
         {
-             $games = selectGames(-1,"","");
+             $games = selectGames(-1,"","",-1);
              
              $score = 0;
                

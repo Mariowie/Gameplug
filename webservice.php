@@ -100,7 +100,7 @@ $server->register(
                 // method name:
                 'selectAchievements', 	
                 // parameter list:
-                array('gameId'=>'xsd:int','id'=>'xsd:int','title'=>'xsd:string'), 
+                array('gameName'=>'xsd:string','id'=>'xsd:int','title'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'tns:Achievements'),
                 // namespace:
@@ -118,7 +118,7 @@ $server->register(
                 // method name:
                 'insertAchievement', 	
                 // parameter list:
-                array('id'=>'xsd:int','gameId'=>'xsd:int','title'=>'xsd:string','description'=>'xsd:string','points'=>'xsd:int'), 
+                array('id'=>'xsd:int','gameName'=>'xsd:string','title'=>'xsd:string','description'=>'xsd:string','points'=>'xsd:int'), 
                 // return value(s):
                 array('return'=>'xsd:int'),
                 // namespace:
@@ -136,7 +136,7 @@ $server->register(
                 // method name:
                 'updateAchievement', 	
                 // parameter list:
-                array('id'=>'xsd:int','gameId'=>'xsd:int','titel'=>'xsd:string','description'=>'xsd:string','id'=>'xsd:int'), 
+                array('id'=>'xsd:int','gameName'=>'xsd:string','titel'=>'xsd:string','description'=>'xsd:string','id'=>'xsd:int'), 
                 // return value(s):
                 array('return'=>'xsd:void'),
                 // namespace:
@@ -171,7 +171,7 @@ $server->register(
                 // method name:
                 'insertAchievementUser', 	
                 // parameter list:
-                array('userId'=>'xsd:int','achievementId'=>'xsd:int','gameId'=>'xsd:int','date'=>'xsd:string'), 
+                array('userId'=>'xsd:int','achievementId'=>'xsd:int','gameName'=>'xsd:string','date'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'xsd:void'),
                 // namespace:
@@ -189,7 +189,7 @@ $server->register(
                 // method name:
                 'selectAchievementsUser', 	
                 // parameter list:
-                array('userId'=>'xsd:int','gameId'=>'xsd:int'), 
+                array('userId'=>'xsd:int','gameName'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'tns:Achievements'),
                 // namespace:
@@ -282,7 +282,7 @@ $server->register(
                 // method name:
                 'insertHighscore', 	
                 // parameter list:
-                array('gameId'=>'xsd:int','userId'=>'xsd:int','score'=>'xsd:int','date'=>'xsd:string'), 
+                array('gameName'=>'xsd:string','userId'=>'xsd:int','score'=>'xsd:int','date'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'xsd:void'),
                 // namespace:
@@ -300,7 +300,7 @@ $server->register(
                 // method name:
                 'selectHighscores', 	
                 // parameter list:
-                array('gameId'=>'xsd:int','userId'=>'xsd:int','date'=>'xsd:string'), 
+                array('gameName'=>'xsd:string','userId'=>'xsd:int','date'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'tns:Highscores'),
                 // namespace:
@@ -318,7 +318,7 @@ $server->register(
                 // method name:
                 'deleteHighscore', 	
                 // parameter list:
-                array('gameId'=>'xsd:int','userId'=>'xsd:int'), 
+                array('gameName'=>'xsd:string','userId'=>'xsd:int'), 
                 // return value(s):
                 array('return'=>'xsd:void'),
                 // namespace:
@@ -335,7 +335,7 @@ $server->register(
                 // method name:
                 'insertHostedgame', 	
                 // parameter list:
-                array('userId'=>'xsd:int','gameId'=>'xsd:int','message'=>'xsd:string','waitingForPlayers'=>'xsd:boolean','amountOfPlayers'=>'xsd:int','maxplayers'=>'xsd:int','ipAddress'=>'xsd:string'), 
+                array('userId'=>'xsd:int','gameName'=>'xsd:string','message'=>'xsd:string','waitingForPlayers'=>'xsd:boolean','amountOfPlayers'=>'xsd:int','maxplayers'=>'xsd:int','ipAddress'=>'xsd:string'), 
                 // return value(s):
                 array('id'=>'xsd:int'),
                 // namespace:
