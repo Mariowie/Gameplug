@@ -56,7 +56,7 @@
        {
             $gameId = selectGames(-1,$gameName,"",-1);
                 $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
-            if(sizeof(selectAchievements($gameName,-1,$titel))==0)
+            if(sizeof(selectAchievements($gameName,$id,""))==0)
             {
                 $database = new Database();
                  $sql = "INSERT INTO `achievements` (`id`,`gameId`,`titel`,`description`,`points`) 

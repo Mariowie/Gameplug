@@ -17,7 +17,7 @@
          function insertHostedGame($userId, $gameName, $message,$waitingForPlayers,$amountOfPlayers,$maxplayers,$ipAddress)
         {
              $gameId = selectGames(-1,$gameName,"",-1);
-           $gameId = $gameId[0]->id;
+           $gameId = $gameId[0]['id'];
              $database = new Database();
             $sql = "INSERT INTO `hostedgames` (`userid`,`gameid`,`message`,`waitingForPlayers`,`amountOfPlayers`,`maxplayers`,`ip-address`) 
                     VALUES('%s','%s','%s','%s','%s','%s','%s')";
