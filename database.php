@@ -39,7 +39,7 @@ class Database {
                     $query = call_user_func_array('sprintf', $args);
             }
            $result= mysql_query($query);
-           //echo $query;
+           echo $query;
            return (!$insert)?$result:mysql_insert_id();
     }
     
