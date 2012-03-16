@@ -15,7 +15,8 @@
          function insertHighscore($gameName,$userId,$score,$date)
         {
             $gameId = selectGames(-1,$gameName,"",-1);
-            $gameId = $gameId[0]->id;
+            
+            $gameId = $gameId[0]['id'];
             $database = new Database();            
             $currentHighscore = getHighestScore($gameId, $userId);
             if($currentHighscore >= $score)
