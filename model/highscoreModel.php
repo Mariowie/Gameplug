@@ -4,7 +4,7 @@
      * @author Mario Herbers
      */
     
-            /**
+        /**
          * Inserts a new highscore
          * @param int $gameId
          * @param int $userId
@@ -12,28 +12,31 @@
          * @param Timestamp $date 
          * @return void
          */
-         function insertHighscore($gameName,$userId,$score,$date)
+        function insertHighscore($gameName,$userId,$score,$date)
         {
             $gameId = selectGames(-1,$gameName,"",-1);
-            
             $gameId = $gameId[0]['id'];
-            $database = new Database();            
+			error_log("|InsertHighscore| Function parameters: \"$gameName\", \"$userId\", \"$score\", \"$date\"");
+            $database = new Database();
             $currentHighscore = getHighestScore($gameId, $userId);
+			error_log("|InsertHighscore| Current highscore: $currentHighscore, provided \"highscore\": $score");
             if($currentHighscore >= $score)
             {
+				error_log("|InsertHighscore| No new highscore, exiting");
                 return;
             }
             else
             {
-                $insertSql = "INSERT INTO `highscores`(`gameId`,`userId`,`date`,`score`) 
-                          VALUES('%s','%s','%s','%s')";                
-                 $result = $database->query($insertSql,array($gameId,$userId,$date,$score)); 
-                 updateUser($userId,"",calculateUserScore($userId)); 
+				error_log("|InsertHighscore| New highscore, inserting into database and updating user");
+                $insertSql = "INSERT INTO `highscores`(`gameId`,`userId`,`date`,`score`) VALUES('%s','%s','%s','%s')";
+				$result = $database->query($insertSql,array($gameId,$userId,$date,$score));
+				if($result){
+					error_log("|InsertHighscore| Added new highscore to database (query result: $result)");
+				} else {
+					error_log("|InsertHighscore| Failed to add new highscore to database (query result: $result)");
+				}
+				updateUser($userId,"",calculateUserScore($userId));
             }
-            //$database->query($insertSql,array($gameId,$userId,$date,$score));
-            
-            
-            
         }
         
         /**

@@ -21,44 +21,40 @@ class Database {
      */
     public  function query($sql,$vars = array(),$insert = false)
     {      
-       $query = $sql;    
-       if(is_scalar($vars))
-            {
-                    $vars = array($vars);
-            }
+        $query = $sql;    
+        if(is_scalar($vars))
+		{
+			$vars = array($vars);
+		}
 
-            if(count($vars) > 0)
-            {
-                    $args = array($sql);
-
-                    foreach($vars as $v)
-                    {
-                            $args[] = mysql_real_escape_string($v);
-                    }
-
-                    $query = call_user_func_array('sprintf', $args);
-            }
-           $result= mysql_query($query);
-           //echo $query;
-           return (!$insert)?$result:mysql_insert_id();
+		if(count($vars) > 0)
+		{
+			$args = array($sql);
+			foreach($vars as $v)
+			{
+				$args[] = mysql_real_escape_string($v);
+			}
+			$query = call_user_func_array('sprintf', $args);
+		}
+		$result = mysql_query($query);
+		error_log("|Query| Query result is \"$result\"");
+		return (!$insert) ? $result : mysql_insert_id();
     }
-    
     
     public function resultArray($result)
     {
         $array = array();
-                            if(is_resource($result))
-                    {    
-                         if(mysql_num_rows($result)!=0) 
-                         {     while($row=mysql_fetch_assoc($result))
-                             {
-                                $array[]=$row;
-                             }
-                         }
-                    }
+		if(is_resource($result))
+		{    
+			if(mysql_num_rows($result)!=0) 
+			{     while($row=mysql_fetch_assoc($result))
+				{
+					$array[]=$row;
+				}
+			}
+		}
         return $array;
     }
-    
 }
 
 
