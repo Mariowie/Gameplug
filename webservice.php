@@ -10,7 +10,7 @@ include('model/userModel.php');
 
   ini_set("soap.wsdl_cache_enabled", 0); 
   ini_set("session.auto_start", 0); 
-$namespace = "http://localhost:90/gameplug/webservice.php";
+$namespace = "http://localhost/gameplug/webservice.php";
 // create a new soap server
 $server = new soap_server();
 // configure our WSDL
