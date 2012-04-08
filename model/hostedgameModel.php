@@ -14,9 +14,9 @@
          * @param string $ipAddress 
          * @return id
          */
-         function insertHostedGame($userId, $gameName, $message,$waitingForPlayers,$amountOfPlayers,$maxplayers,$ipAddress)
+         function insertHostedGame($userId, $gameName, $message,$waitingForPlayers,$amountOfPlayers,$maxplayers,$ipAddress,$developer)
         {
-             $gameId = selectGames(-1,$gameName,"",-1);
+             $gameId = selectGames(-1,$gameName,$developer,-1);
            $gameId = $gameId[0]['id'];
              $database = new Database();
             $sql = "INSERT INTO `hostedgames` (`userid`,`gameid`,`message`,`waitingForPlayers`,`amountOfPlayers`,`maxplayers`,`ip-address`) 
@@ -63,7 +63,7 @@
          * 
          * @return  array(hostedGame(id,game.name,user.name,waitingForPlayers,amountOfPlayer,message,ipaddress))
          */        
-         function selectHostedGames($gameName,$author,$userId,$id)
+         function selectHostedGames($gameName,$developer,$userId,$id)
         {
              $database = new Database();
             $sql ="SELECT `hostedgames`.`id`,`games`.`name` AS 'gameName',
@@ -78,20 +78,20 @@
                    FROM `hostedgames` 
                    LEFT JOIN `games` ON `hostedgames`.`gameid` = `games`.`id`
                    LEFT JOIN `users` ON `hostedgames`.`userid` = `users`.`id`";
-           $sql.=($gameName!=""||$userId > 0|| $id >0 || $author !="")?" WHERE":'';
+           $sql.=($gameName!=""||$userId > 0|| $id >0 || $developer !="")?" WHERE":'';
            $sql.=($id>=0)?"`hostedgames`.`id`='%s'":"";
            $sql.=($gameName !="" && ($id >0) )?" AND":"";
            $sql.=($gameName != "")?"`games`.`name` = '%s'":"";
            $sql.=($userId>0 && ($gameName > 0 || $id))?" AND'":'';
            $sql.=($userId>0 )?" `users`.`id` = '%s'":'';
-		   $sql.=($author!="" && ($gameName > 0 || $id) || $userId)?" AND ":"";
-           $sql.=($author!="")?" `games`.`developer` = '%s'":"";
+		   $sql.=($developer!="" && ($gameName > 0 || $id) || $userId)?" AND ":"";
+           $sql.=($developer!="")?" `games`.`developer` = '%s'":"";
 		   
            $param = array();
            ($id>0)?array_push($param, $id):'';
            ($gameName != "")?array_push($param, $gameName ):'';
            ($userId>0)?array_push($param, $userId):'';
-           ($author!="")?array_push($param, $author):'';
+           ($developer!="")?array_push($param, $developer):'';
            return $database->resultArray($database->query($sql,$param));
         }
         

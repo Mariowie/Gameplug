@@ -11,7 +11,7 @@
                       <tbody>
                           {% for game in games %}
                           <tr class="even">
-                              <td class="gameName" ><a href="{{ url}}/index.php/games/{{ game.name }}">{{game.name}}</td>
+                              <td class="gameName" ><a href="{{ url}}/index.php/games/{{ game.developer }}/{{ game.name }}">{{game.name}}</td>
                               <td class="gameHighscore" >{{game.highscore}}</td>
                               <td class="gameDeveloper">{{game.developer}}</td>
                               <td class="gameAchievements">{{game.achievements}}</td>

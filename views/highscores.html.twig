@@ -15,7 +15,7 @@
                                 <tr class="odd">  
                             {% endif %}                                   
                                   <td> 
-                                      <a href="{{url}}/index.php/games/{{highscore.gameName}}">{{ highscore.gameName }}</a>
+                                      <a href="{{url}}/index.php/games/{{highscore.developer}}/{{highscore.gameName}}">{{ highscore.gameName }}</a>
                                   </td>
                                   <td class="userScore">{{ highscore.score }}</td>
                                   <td class="achievements">{{ highscore.date|date("h:i m/d/Y") }}</td>

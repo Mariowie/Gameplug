@@ -7,14 +7,15 @@
     $url = explode("/", str_replace("gameplug/index.php/", "", $_SERVER["REQUEST_URI"]));    
     if(isset($url[1]))
     {
+       
         if($url[1] == "users")
-        {
+        { 
             if(!isset($url[2]))
             {
                 return $website->users();
             }
             elseif (isset($url[2])) 
-            {
+            {               
                 $url[2] = $url[2] + 0;
                 if(is_int($url[2]))
                 {
@@ -28,21 +29,25 @@
         }
         elseif ($url[1] == "games") 
         {
-            if(!isset($url[2]))
+            if(!isset($url[2]) && !isset($url[3]))
             {
                 return $website->games();
             }
-            elseif (isset($url[2])) 
+            elseif (isset($url[2]) && isset($url[3])) 
             {
                 $url[2] = $url[2];
-                if(is_string($url[2]))
+                if(is_string($url[2])&& is_string($url[3]))
                 {
-                    return $website->games($url[2]);
+                    return $website->games($url[3],$url[2]);
                 }
                 else
                 {
                     return $website->games();
                 }
+            }
+            else
+            {
+                return $website->games();
             }
         }
         elseif ($url[1]=="") 
@@ -87,7 +92,7 @@
             if($id >=0)
             {
                 
-                $highscores = $this->client->selectHighscores(-1,$id,"");
+                $highscores = $this->client->selectHighscores("",$id,"","");
                 $highscoreTemplate = $this->twig->render('highscores.html.twig',
                                                             array(
                                                                     'highscores'=>$highscores,
@@ -130,12 +135,13 @@
          * or show a single game with more detailed info.
          * @param int $id 
          */
-        public function games($id='all')
+        public function games($id='all',$developer = "")
         {
 
             $id= ($id == 'all')?-1:$id;
-            
-            $gameRequest = $this->client->selectGames(-1,$id,"",-1); 
+            $id = str_replace("%20", " ", $id);
+            echo $id;
+            $gameRequest = $this->client->selectGames(-1,$id,$developer,-1); 
             
             $id = (sizeof($gameRequest)<=0)?"":$id;
             
@@ -143,9 +149,8 @@
             $content = "";
             if($id !="")
             {
-                $highscores = $this->client->selectHighscores($id,-1,"");
-                $achievements = $this->client->selectAchievements($id,-1,""); 
-                var_dump($achievements);
+                $highscores = $this->client->selectHighscores($id,-1,"",$developer);
+                $achievements = $this->client->selectAchievements($id,-1,"",$developer); 
                 $achievementsAchieved = $this->twig->render('achievementAchieved.html.twig',array('listOfAchievements'=>$achievements,'chartAchieved'=>'achievedChar'));
                 $achievementsScore = $this->twig->render('achievementScore.html.twig',array('listOfAchievements'=>$achievements,'chartScore'=>'scoreChar'));
                 $highscoresTemplate = $this->twig->render('highscoresOverview.html.twig',array(

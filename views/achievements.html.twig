@@ -16,7 +16,7 @@
                           {% for achievement in achievements %}
                               <tr class="even">                 
                                   {% if subjectIsUser%}
-                                    <td>{{achievement.gameName}}</td>
+                                    <td> <a href="{{url}}/index.php/games/{{achievement.developer}}/{{achievement.gameName}}">{{achievement.gameName}}</a></td>
                                   {% endif%}
                                   <td>{{achievement.title}}</td>                                  
                                   <td class="achievementPoints">{{achievement.points}}</td>

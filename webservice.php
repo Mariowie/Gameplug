@@ -22,6 +22,7 @@ $server->wsdl->addComplexType('Achievement','complexType','struct','all','',
 		array(
 			'id' => array('name' => 'id','type' => 'xsd:int'),
 			'gameName' => array('name' => 'gameName','type' => 'xsd:string'),
+                        'developer' => array('name' => 'developer','type' => 'xsd:string'),
                         'gameId' => array('name' => 'gameId','type' => 'xsd:int'),
 			'title' => array('name' => 'title','type' => 'xsd:string'),
 			'description' => array('name' => 'description','type' => 'xsd:string'),
@@ -53,6 +54,7 @@ $server->wsdl->addComplexType('Highscore','complexType','struct','all','',
 		array(
 			'gameName' => array('name' => 'gameName','type' => 'xsd:string'),
 			'userName' => array('name' => 'userName','type' => 'xsd:string'),
+                        'developer' => array('name' => 'developer','type' => 'xsd:string'),
 			'gameid' => array('name' => 'gameid','type' => 'xsd:int'),
                         'userid' => array('name' => 'userid','type' => 'xsd:int'),
                         'score' => array('name' => 'score','type' => 'xsd:int'),
@@ -101,7 +103,7 @@ $server->register(
                 // method name:
                 'selectAchievements', 	
                 // parameter list:
-                array('gameName'=>'xsd:string','id'=>'xsd:int','title'=>'xsd:string'), 
+                array('gameName'=>'xsd:string','id'=>'xsd:int','title'=>'xsd:string','developer'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'tns:Achievements'),
                 // namespace:
@@ -119,7 +121,7 @@ $server->register(
                 // method name:
                 'insertAchievement', 	
                 // parameter list:
-                array('id'=>'xsd:int','gameName'=>'xsd:string','title'=>'xsd:string','description'=>'xsd:string','points'=>'xsd:int'), 
+                array('id'=>'xsd:int','gameName'=>'xsd:string','title'=>'xsd:string','description'=>'xsd:string','points'=>'xsd:int','developer'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'xsd:int'),
                 // namespace:
@@ -172,7 +174,7 @@ $server->register(
                 // method name:
                 'insertAchievementUser', 	
                 // parameter list:
-                array('userId'=>'xsd:int','achievementId'=>'xsd:int','gameName'=>'xsd:string','date'=>'xsd:string'), 
+                array('userId'=>'xsd:int','achievementId'=>'xsd:int','gameName'=>'xsd:string','date'=>'xsd:string','developer'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'xsd:void'),
                 // namespace:
@@ -190,7 +192,7 @@ $server->register(
                 // method name:
                 'selectAchievementsUser', 	
                 // parameter list:
-                array('userId'=>'xsd:int','gameName'=>'xsd:string'), 
+                array('userId'=>'xsd:int','gameName'=>'xsd:string','developer'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'tns:Achievements'),
                 // namespace:
@@ -283,7 +285,7 @@ $server->register(
                 // method name:
                 'insertHighscore', 	
                 // parameter list:
-                array('gameName'=>'xsd:string','userId'=>'xsd:int','score'=>'xsd:int','date'=>'xsd:string'), 
+                array('gameName'=>'xsd:string','userId'=>'xsd:int','score'=>'xsd:int','date'=>'xsd:string','developer'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'xsd:void'),
                 // namespace:
@@ -301,7 +303,7 @@ $server->register(
                 // method name:
                 'selectHighscores', 	
                 // parameter list:
-                array('gameName'=>'xsd:string','userId'=>'xsd:int','date'=>'xsd:string'), 
+                array('gameName'=>'xsd:string','userId'=>'xsd:int','date'=>'xsd:string','developer'=>'xsd:string'), 
                 // return value(s):
                 array('return'=>'tns:Highscores'),
                 // namespace:
@@ -336,7 +338,7 @@ $server->register(
                 // method name:
                 'insertHostedgame', 	
                 // parameter list:
-                array('userId'=>'xsd:int','gameName'=>'xsd:string','message'=>'xsd:string','waitingForPlayers'=>'xsd:boolean','amountOfPlayers'=>'xsd:int','maxplayers'=>'xsd:int','ipAddress'=>'xsd:string'), 
+                array('userId'=>'xsd:int','gameName'=>'xsd:string','message'=>'xsd:string','waitingForPlayers'=>'xsd:boolean','amountOfPlayers'=>'xsd:int','maxplayers'=>'xsd:int','ipAddress'=>'xsd:string','developer'=>'xsd:string'), 
                 // return value(s):
                 array('id'=>'xsd:int'),
                 // namespace:

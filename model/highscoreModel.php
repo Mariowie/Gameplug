@@ -12,13 +12,13 @@
          * @param Timestamp $date 
          * @return void
          */
-         function insertHighscore($gameName,$userId,$score,$date)
+         function insertHighscore($gameName,$userId,$score,$date,$developer)
         {
-            $gameId = selectGames(-1,$gameName,"",-1);
+            $gameId = selectGames(-1,$gameName,$developer,-1);
             
             $gameId = $gameId[0]['id'];
             $database = new Database();            
-            $currentHighscore = getHighestScore($gameId, $userId);
+            $currentHighscore = getHighestScore($gameId, $userId,$developer);
             if($currentHighscore >= $score)
             {
                 return;
@@ -44,13 +44,13 @@
          * @param timestamp $date 
          * @return array(highscore(game.name, user.name,score,date))
          */
-         function selectHighscores($gameName,$userId,$date)
+         function selectHighscores($gameName,$userId,$date,$developer)
         {
-                $gameId = selectGames(-1,$gameName,"",-1);
+                $gameId = selectGames(-1,$gameName,$developer,-1);
                 $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
                 
               $database = new Database();
-                $sql = "SELECT `games`.`name` AS gameName,`games`.`id` AS gameid,`users`.`id` AS userid,`users`.`nickname` AS userName,`highscores`.`score`,`highscores`.`date`
+                $sql = "SELECT `games`.`name` AS gameName,`games`.`developer`,`games`.`id` AS gameid,`users`.`id` AS userid,`users`.`nickname` AS userName,`highscores`.`score`,`highscores`.`date`
                         FROM `highscores`  
                         LEFT JOIN `games` ON `highscores`.`gameid` = `games`.`id`
                         LEFT JOIN `users` ON `highscores`.`userid` = `users`.`id`                     

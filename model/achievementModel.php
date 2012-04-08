@@ -11,13 +11,13 @@
         * @param int $gameId
         * @param int $id 
         */
-       function selectAchievements($gameName,$id,$name)
+       function selectAchievements($gameName,$id,$name,$developer)
        {
-            $gameId = selectGames(-1,$gameName,"",-1);
+            $gameId = selectGames(-1,$gameName,$developer,-1);
             $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
             
            $database = new Database();
-           $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName, COALESCE(userachievement.`times`,0) AS achieved
+           $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,`games`.`developer`, COALESCE(userachievement.`times`,0) AS achieved
                         FROM `achievements` LEFT JOIN `games` 
                         ON `achievements`.gameId = `games`.id
                         LEFT JOIN 
@@ -50,11 +50,12 @@
          * @param string $titel
          * @param string $description
          * @param int $points 
+         * @param string $developer
          * @return int id
          */                
-       function insertAchievement($id,$gameName, $titel, $description, $points)
+       function insertAchievement($id,$gameName, $titel, $description, $points,$developer)
        {
-            $gameId = selectGames(-1,$gameName,"",-1);
+            $gameId = selectGames(-1,$gameName,$developer,-1);
                 $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
             if(sizeof(selectAchievements($gameName,$id,""))==0)
             {
@@ -101,10 +102,10 @@
         * @param timestamp $date
         * @return void
         */
-       function insertAchievementUser($userId,$achievementId,$gameName,$date)
+       function insertAchievementUser($userId,$achievementId,$gameName,$date,$developer)
        {
            $dateNew = date("d-m-Y h:i:s", strtotime($date));       
-            $gameId = selectGames(-1,$gameName,"",-1);
+            $gameId = selectGames(-1,$gameName,$developer,-1);
                 $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
             $database = new Database();
             $sql = "INSERT INTO `userachievements` (`userId`,`achievementId`,`gameid`,`dateOfAchieving`) 
@@ -120,14 +121,14 @@
         * @param int $gameId optional
         * @return ARRAY
         */
-       function selectAchievementsUser($userId, $gameName) 
+       function selectAchievementsUser($userId, $gameName,$developer) 
        {
             $database = new Database();
-            $gameId = selectGames(-1,$gameName,"",-1);
+            $gameId = selectGames(-1,$gameName,$developer,-1);
                 $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
             if($userId >= 0 && $gameId >= 0)
             {    
-                $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
+                $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,`games`.`developer`,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
                         FROM `achievements` 
                         LEFT JOIN `userachievements` ON `achievements`.`id` = `userachievements`.`achievementId`
                         LEFT JOIN `games` ON `achievements`.gameId = `games`.id
@@ -146,7 +147,7 @@
             {
                 if($userId >= 0 )
                 {
-                    $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
+                    $sql = "SELECT `games`.`developer`,`achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
                             FROM `achievements` 
                             LEFT JOIN `userachievements` ON `achievements`.`id` = `userachievements`.`achievementId`
                             LEFT JOIN `games` ON `achievements`.gameId = `games`.id
@@ -163,7 +164,7 @@
                 }
                 elseif($gameId >= 0)
                 {
-                    $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
+                    $sql = "SELECT `games`.`developer`,`achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
                             FROM `achievements` 
                             LEFT JOIN `userachievements` ON `achievements`.`id` = `userachievements`.`achievementId`
                             LEFT JOIN `games` ON `achievements`.gameId = `games`.id
@@ -182,7 +183,7 @@
             }
             else 
             {
-                $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
+                $sql = "SELECT `games`.`developer`,`achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
                         FROM `achievements` 
                         LEFT JOIN `userachievements` ON `achievements`.`id` = `userachievements`.`achievementId`
                         LEFT JOIN `games` ON `achievements`.gameId = `games`.id
@@ -201,7 +202,7 @@
        
        function achievementScore($id)
        {
-           $userAchievements  = selectAchievementsUser($id,-1);
+           $userAchievements  = selectAchievementsUser($id,-1,"");
            
            $score = 0;
            
