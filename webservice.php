@@ -336,7 +336,7 @@ $server->register(
                 // method name:
                 'insertHostedgame', 	
                 // parameter list:
-                array('userId'=>'xsd:int','gameName'=>'xsd:string','message'=>'xsd:string','waitingForPlayers'=>'xsd:boolean','amountOfPlayers'=>'xsd:int','maxplayers'=>'xsd:int','ipAddress'=>'xsd:string'), 
+                array('userId'=>'xsd:int','gameName'=>'xsd:string','developer'=>'xsd:string','message'=>'xsd:string','waitingForPlayers'=>'xsd:boolean','amountOfPlayers'=>'xsd:int','maxplayers'=>'xsd:int','ipAddress'=>'xsd:string'), 
                 // return value(s):
                 array('id'=>'xsd:int'),
                 // namespace:

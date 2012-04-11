@@ -149,6 +149,7 @@
             if($nickname != "" && $score >= 0)
             {
                 $sql = "UPDATE `users` SET `nickname`='%s',`score`='%s' WHERE `id` = '%s'";
+				error_log("|UpdateUser| Passing on query $sql");
                 $database->query($sql,array($nickname,$score,$id));
                 return null;
             }
@@ -157,18 +158,19 @@
                 if($nickname != "")
                 {
                     $sql = "UPDATE `users` SET `nickname`='%s' WHERE `id` = '%s'";
+					error_log("|UpdateUser| Passing on query $sql");
                     $database->query($sql,array($nickname,$id));
                     return null;
                 }
                 elseif ($score) 
                 {
                     $sql = "UPDATE `users` SET `score`='%s' WHERE `id` = '%s'";
+					error_log("|UpdateUser| Passing on query $sql");
                     $database->query($sql,array($score,$id));
                     return null;
                 }
             }
-
-                
+			error_log("|UpdateUser| Doing jack shit...");
         }  
         
         /**
@@ -182,4 +184,4 @@
             $score += getHighscoresUser($id);
             return $score;
         }
-   
+  

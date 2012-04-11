@@ -14,12 +14,13 @@
          */
         function insertHighscore($gameName,$userId,$score,$date)
         {
+			error_log("|InsertHighscore| Function parameters: \"$gameName\", \"$userId\", \"$score\", \"$date\"");
             $gameId = selectGames(-1,$gameName,"",-1);
             $gameId = $gameId[0]['id'];
-			error_log("|InsertHighscore| Function parameters: \"$gameName\", \"$userId\", \"$score\", \"$date\"");
+			error_log("|InsertHighscore| Found id $gameId for game $gameName");
             $database = new Database();
             $currentHighscore = getHighestScore($gameId, $userId);
-			error_log("|InsertHighscore| Current highscore: $currentHighscore, provided \"highscore\": $score");
+			error_log("|InsertHighscore| Current highscore: $currentHighscore, provided highscore: $score");
             if($currentHighscore >= $score)
             {
 				error_log("|InsertHighscore| No new highscore, exiting");
@@ -29,13 +30,14 @@
             {
 				error_log("|InsertHighscore| New highscore, inserting into database and updating user");
                 $insertSql = "INSERT INTO `highscores`(`gameId`,`userId`,`date`,`score`) VALUES('%s','%s','%s','%s')";
-				$result = $database->query($insertSql,array($gameId,$userId,$date,$score));
+				$result = $database->query2($insertSql, array($gameId,$userId,$score,$date), true);
+				// $result should be true/false.
 				if($result){
 					error_log("|InsertHighscore| Added new highscore to database (query result: $result)");
 				} else {
 					error_log("|InsertHighscore| Failed to add new highscore to database (query result: $result)");
 				}
-				updateUser($userId,"",calculateUserScore($userId));
+				//updateUser($userId,"",calculateUserScore($userId));
             }
         }
         

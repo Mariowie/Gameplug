@@ -84,6 +84,13 @@
              ($user >= "")?array_push($param, $user):"";
              return $database->resultArray($database->query($sql,$param));
         }
+		
+		function getGameId($gameName, $developer)
+		{
+			$database = new Database();
+			$sql = "SELECT id FROM games WHERE name='$gameName' AND developer='$developer'";
+			error_log("|GetGameId| Querying database with query \"$sql\"");
+		}
         
         /**
          * deletes a game
