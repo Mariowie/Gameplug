@@ -17,15 +17,17 @@
             $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
             
            $database = new Database();
-           $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,`games`.`developer`, COALESCE(userachievement.`times`,0) AS achieved
-                        FROM `achievements` LEFT JOIN `games` 
-                        ON `achievements`.gameId = `games`.id
-                        LEFT JOIN 
-                                (
-                                    SELECT COUNT(*) AS times,`achievementId`
-                                    FROM `userachievements`
-                                    GROUP BY `achievementId`
-                                ) AS userachievement ON userachievement.`achievementId` = `achievements`.`id`
+           $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,
+                            `achievements`.`points`,`games`.`name` AS gameName,`games`.`developer`, 
+                            COALESCE(userachievement.`times`,0) AS achieved
+                    FROM `achievements` LEFT JOIN `games` 
+                    ON `achievements`.gameId = `games`.id
+                    LEFT JOIN 
+                    (
+                        SELECT COUNT(*) AS times,`achievementId`
+                        FROM `userachievements`
+                        GROUP BY `achievementId`
+                    ) AS userachievement ON userachievement.`achievementId` = `achievements`.`id`
                        ";
            $sql.= ($gameId >= 0 || $id >= 0 ||$name!="" )?" WHERE ":"";
            $sql.= ($gameId >= 0 )?" `games`.id = '%s' ":"";
@@ -126,9 +128,13 @@
             $database = new Database();
             $gameId = selectGames(-1,$gameName,$developer,-1);
                 $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
+        // TODO compress sql 
             if($userId >= 0 && $gameId >= 0)
             {    
-                $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,`games`.`developer`,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
+                $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,
+                                `achievements`.`points`,`games`.`name` AS gameName,`games`.`developer`,
+                                COALESCE(count.`times`,0) AS achieved,
+                                COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
                         FROM `achievements` 
                         LEFT JOIN `userachievements` ON `achievements`.`id` = `userachievements`.`achievementId`
                         LEFT JOIN `games` ON `achievements`.gameId = `games`.id
