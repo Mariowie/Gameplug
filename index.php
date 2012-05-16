@@ -1,26 +1,34 @@
 <?php
     ini_set("soap.wsdl_cache_enabled", "1"); // disabling WSDL cache
-    //$client = new SoapClient("http://localhost/gameplug/webservice.php?wsdl");
+   
     $website = new website();
    define('url',"http://".$_SERVER['SERVER_NAME'].'/gameplug');
-    
+    // get the slugs in the URI
     $url = explode("/", str_replace("gameplug/index.php/", "", $_SERVER["REQUEST_URI"]));    
     if(isset($url[1]))
     {
-       
+       // if the first slug is users
         if($url[1] == "users")
         { 
+            // if the second slug doesn't exist
             if(!isset($url[2]))
             {
+                // show all the users
                 return $website->users();
             }
+            // if the second slug is set
             elseif (isset($url[2])) 
             {               
                 $url[2] = $url[2] + 0;
+                // check if second slug is a integer
+                // if it is show the user page of the 
+                // user with this id
                 if(is_int($url[2]))
                 {
                     return $website->users($url[2]);
                 }
+                // there isn't a usable user id thus all the users
+                // will be shown
                 else
                 {
                     return $website->users();
@@ -60,6 +68,11 @@
     {
         return $website->users();
     }
+
+
+/**
+*  Class website deals with the presentation of the webpages
+*/ 
 
     class website
     {
@@ -151,12 +164,18 @@
             {
                 $highscores = $this->client->selectHighscores($id,-1,"",$developer);
                 $achievements = $this->client->selectAchievements($id,-1,"",$developer); 
-                $achievementsAchieved = $this->twig->render('achievementAchieved.html.twig',array('listOfAchievements'=>$achievements,'chartAchieved'=>'achievedChar'));
-                $achievementsScore = $this->twig->render('achievementScore.html.twig',array('listOfAchievements'=>$achievements,'chartScore'=>'scoreChar'));
-                $highscoresTemplate = $this->twig->render('highscoresOverview.html.twig',array(
-                                                            'releaseDate' => $games[0]->releaseDate,
-                                                            'listOfHighscores'=>$highscores,
-                                                                'highscoreChart'=>'highscoreChart','gameName'=>$games[0]->name,));
+                $achievementsAchieved = $this->twig->render('achievementAchieved.html.twig',
+                    array('listOfAchievements'=>$achievements,
+                        'chartAchieved'=>'achievedChar'));
+                $achievementsScore = $this->twig->render('achievementScore.html.twig',
+                    array('listOfAchievements'=>$achievements,
+                        'chartScore'=>'scoreChar'));
+                $highscoresTemplate = $this->twig->render('highscoresOverview.html.twig',
+                    array(
+                        'releaseDate' => $games[0]->releaseDate,
+                        'listOfHighscores'=>$highscores,
+                        'highscoreChart'=>'highscoreChart',
+                        'gameName'=>$games[0]->name));
                 $content = $this->twig->render('game.html.twig',
                                 array(
                                         'gameName'=>$games[0]->name,
