@@ -50,7 +50,9 @@
                 $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
                 
               $database = new Database();
-                $sql = "SELECT `games`.`name` AS gameName,`games`.`developer`,`games`.`id` AS gameid,`users`.`id` AS userid,`users`.`nickname` AS userName,`highscores`.`score`,`highscores`.`date`
+                $sql = "SELECT `games`.`name` AS gameName,`games`.`developer`,
+                                `games`.`id` AS gameid,`users`.`id` AS userid,`users`.`nickname` AS userName,
+                                `highscores`.`score`,`highscores`.`date`
                         FROM `highscores`  
                         LEFT JOIN `games` ON `highscores`.`gameid` = `games`.`id`
                         LEFT JOIN `users` ON `highscores`.`userid` = `users`.`id`                     
