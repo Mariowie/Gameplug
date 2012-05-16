@@ -14,14 +14,17 @@
          * @param string $ipAddress 
          * @return id
          */
-         function insertHostedGame($userId, $gameName, $message,$waitingForPlayers,$amountOfPlayers,$maxplayers,$ipAddress,$developer)
+         function insertHostedGame($userId, $gameName, $message,$waitingForPlayers,
+ 					$amountOfPlayers,$maxplayers,$ipAddress,$developer)
         {
              $gameId = selectGames(-1,$gameName,$developer,-1);
            $gameId = $gameId[0]['id'];
              $database = new Database();
-            $sql = "INSERT INTO `hostedgames` (`userid`,`gameid`,`message`,`waitingForPlayers`,`amountOfPlayers`,`maxplayers`,`ip-address`) 
+            $sql = "INSERT INTO `hostedgames` (`userid`,`gameid`,`message`,`waitingForPlayers`,
+            			`amountOfPlayers`,`maxplayers`,`ip-address`) 
                     VALUES('%s','%s','%s','%s','%s','%s','%s')";
-            return $database->query($sql,array($userId, $gameId, $message,$waitingForPlayers,$amountOfPlayers,$maxplayers,$ipAddress),true);
+            return $database->query($sql,array($userId, $gameId, $message,$waitingForPlayers,
+            				$amountOfPlayers,$maxplayers,$ipAddress),true);
         }
         
         /**
@@ -66,15 +69,16 @@
          function selectHostedGames($gameName,$developer,$userId,$id)
         {
              $database = new Database();
-            $sql ="SELECT `hostedgames`.`id`,`games`.`name` AS 'gameName',
-							`games`.`id` AS 'gameid',
-							`users`.`nickname` AS 'userName',
-							`users`.`id` AS 'userid' ,
-							`hostedgames`.`waitingForPlayers`,
-							`hostedgames`.`amountOfPlayers`,
-							`hostedgames`.`message`,
-                                                        `hostedgames`.`maxplayers`,
-							`hostedgames`.`ip-address` AS 'ipaddress' 
+            $sql ="SELECT `hostedgames`.`id`,
+	    			`games`.`name` AS 'gameName',
+				`games`.`id` AS 'gameid',
+				`users`.`nickname` AS 'userName',
+				`users`.`id` AS 'userid' ,
+				`hostedgames`.`waitingForPlayers`,
+				`hostedgames`.`amountOfPlayers`,
+				`hostedgames`.`message`,
+	                        `hostedgames`.`maxplayers`,
+				`hostedgames`.`ip-address` AS 'ipaddress' 
                    FROM `hostedgames` 
                    LEFT JOIN `games` ON `hostedgames`.`gameid` = `games`.`id`
                    LEFT JOIN `users` ON `hostedgames`.`userid` = `users`.`id`";
