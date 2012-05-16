@@ -47,8 +47,10 @@
          function selectGames($id,$name,$developer,$user)
         {
              $database = new Database();
-             $sql = "SELECT `games`.`id`,`games`.`name`,`games`.`releaseDate`,`games`.`developer`,`games`.`downloadUrl`,COALESCE(  `highscore`.`score` , 0 ) AS highscore,
-                     COALESCE(  `achievements`.`achievements` , 0 ) AS achievements   
+             $sql = "SELECT `games`.`id`,`games`.`name`,`games`.`releaseDate`,`games`.`developer`,
+                                `games`.`downloadUrl`,
+                                COALESCE(  `highscore`.`score` , 0 ) AS highscore,
+                                COALESCE(  `achievements`.`achievements` , 0 ) AS achievements   
                      FROM `games`
                      LEFT JOIN (
                                     SELECT `score`,  `gameid` , `userid`
