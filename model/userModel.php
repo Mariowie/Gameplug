@@ -17,7 +17,10 @@
              $database->query("SET @rank=0;",array());
             if($openId=="" && $id == -1)
                 {                   
-                    $sql = "SELECT  `users`.`id` , `ranking`.`rank`, `users`.`nickname` ,  `users`.`score` ,  `users`.`openId` , COALESCE(  `achievements`.`achievements` , 0 ) AS achievements, COALESCE(  `highscores`.`highscores` , 0 ) AS highscores
+                    $sql = "SELECT  `users`.`id` , `ranking`.`rank`, `users`.`nickname` ,  
+                                `users`.`score` ,  `users`.`openId` , 
+                                COALESCE(  `achievements`.`achievements` , 0 ) AS achievements, 
+                                COALESCE(  `highscores`.`highscores` , 0 ) AS highscores
                             FROM  `users` 
                             LEFT JOIN (
                                         SELECT COUNT( * ) AS achievements,  `userId` 
