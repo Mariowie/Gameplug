@@ -15,35 +15,18 @@
         {
              $database = new Database();
              $database->query("SET @rank=0;",array());
-            if($openId=="" && $id == -1)
-                {                   
-                    $sql = "SELECT  `users`.`id` , `ranking`.`rank`, `users`.`nickname` ,  
-                                `users`.`score` ,  `users`.`openId` , 
-                                COALESCE(  `achievements`.`achievements` , 0 ) AS achievements, 
-                                COALESCE(  `highscores`.`highscores` , 0 ) AS highscores
-                            FROM  `users` 
-                            LEFT JOIN (
-                                        SELECT COUNT( * ) AS achievements,  `userId` 
-                                        FROM  `userachievements` 
-                                        GROUP BY  `userid`
-                            ) AS  `achievements` ON  `achievements`.`userid` =  `users`.`id` 
-                            LEFT JOIN (
-                                        SELECT COUNT( * ) AS highscores,  `userid` 
-                                        FROM  `highscores` 
-                                        GROUP BY  `gameid`
-                            ) AS  `highscores` ON  `highscores`.`userid` =  `users`.`id` 
-                            LEFT JOIN (
-                                        SELECT @rank := @rank +1 AS rank, `id`
-                                        FROM users
-                                        ORDER BY score DESC 
-                            ) AS  `ranking` ON  `ranking`.`id` =  `users`.`id` 
-                            ";                    
-                    $result =$database->query($sql,array());
-                    $array = $database->resultArray($result);
-                    return $array;          
-                }
-            elseif($openId != "" && $id >= 0)
-                {                   
+            $whereArray = array();
+            if($openId != ""  )
+            { 
+                $whereArray["`users`.`openid`"] = $openId;
+            }
+            if($id >= 0)
+            {
+                $whereArray["`users`.`id`"] = $id;
+            }     
+                
+         
+            
                     $sql = "SELECT  `users`.`id` , `ranking`.`rank`, `users`.`nickname` ,  `users`.`score` ,  `users`.`openId` , COALESCE(  `achievements`.`achievements` , 0 ) AS achievements, COALESCE(  `highscores`.`highscores` , 0 ) AS highscores
                             FROM  `users` 
                             LEFT JOIN (
@@ -61,62 +44,11 @@
                                         FROM users
                                         ORDER BY score DESC 
                             ) AS  `ranking` ON  `ranking`.`id` =  `users`.`id`
-                            WHERE `users`.`openid` = '%s' AND `users`.`id` = '%s'";                    
-                    $result =$database->query($sql,array($openId,$id));
-                    $array = $database->resultArray($result);
+                            ";                    
+                    $result =$database->query($sql,array(),false,$whereArray);
+                    $array = $result;
                     return $array; 
-                }
-            elseif($openId !="" || $id >= 0)
-                {
-                    if($openId !="" )
-                    {
-                        $sql = "SELECT  `users`.`id` , `ranking`.`rank`, `users`.`nickname` ,  `users`.`score` ,  `users`.`openId` , COALESCE(  `achievements`.`achievements` , 0 ) AS achievements, COALESCE(  `highscores`.`highscores` , 0 ) AS highscores
-                                FROM  `users` 
-                                LEFT JOIN (
-                                            SELECT COUNT( * ) AS achievements,  `userId` 
-                                            FROM  `userachievements` 
-                                            GROUP BY  `userid`
-                                ) AS  `achievements` ON  `achievements`.`userid` =  `users`.`id` 
-                                LEFT JOIN (
-                                            SELECT COUNT( * ) AS highscores,  `userid` 
-                                            FROM  `highscores` 
-                                            GROUP BY  `gameid`
-                                ) AS  `highscores` ON  `highscores`.`userid` =  `users`.`id` 
-                                LEFT JOIN (
-                                            SELECT @rank := @rank +1 AS rank, `id`
-                                            FROM users
-                                            ORDER BY score DESC 
-                                ) AS  `ranking` ON  `ranking`.`id` =  `users`.`id` 
-                                WHERE `users`.`openid` = '%s'";                    
-                        $result =$database->query($sql,array($openId));
-                        $array = $database->resultArray($result);
-                        return $array;  
-                    }
-                    elseif($id >= 0)
-                    {
-                        $sql = "SELECT  `users`.`id` , `ranking`.`rank`, `users`.`nickname` ,  `users`.`score` ,  `users`.`openId` , COALESCE(  `achievements`.`achievements` , 0 ) AS achievements, COALESCE(  `highscores`.`highscores` , 0 ) AS highscores
-                                FROM  `users` 
-                                LEFT JOIN (
-                                            SELECT COUNT( * ) AS achievements,  `userId` 
-                                            FROM  `userachievements` 
-                                            GROUP BY  `userid`
-                                ) AS  `achievements` ON  `achievements`.`userid` =  `users`.`id` 
-                                LEFT JOIN (
-                                            SELECT COUNT( * ) AS highscores,  `userid` 
-                                            FROM  `highscores` 
-                                            GROUP BY  `gameid`
-                                ) AS  `highscores` ON  `highscores`.`userid` =  `users`.`id` 
-                                LEFT JOIN (
-                                            SELECT @rank := @rank +1 AS rank, `id`
-                                            FROM users
-                                            ORDER BY score DESC 
-                                ) AS  `ranking` ON  `ranking`.`id` =  `users`.`id`  
-                                WHERE `users`.`id` = '%s'";                    
-                        $result =$database->query($sql,array($id));
-                        $array = $database->resultArray($result);
-                        return $array; 
-                    }
-                }   
+              
         }
         
         /**
@@ -149,6 +81,7 @@
          function updateUser($id,$nickname,$score)
         {
             $database = new Database();
+                                    
             if($nickname != "" && $score >= 0)
             {
                 $sql = "UPDATE `users` SET `nickname`='%s',`score`='%s' WHERE `id` = '%s'";

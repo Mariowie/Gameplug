@@ -68,6 +68,26 @@
          */        
          function selectHostedGames($gameName,$developer,$userId,$id)
         {
+             
+              
+            
+            $whereArray = array();
+            if($userId>0)
+            { 
+                $whereArray["`users`.`id`"] = $userId;
+            }
+            if($id >= 0)
+            {
+                $whereArray["`hostedgames`.`id`"] = $id;
+            } 
+            if($gameName != "")
+            {
+                $whereArray["`games`.`name`"] = $gameName;
+            }
+            if($developer!="")
+            {
+                $whereArray["`games`.`developer`"] = $developer;
+            }
              $database = new Database();
             $sql ="SELECT `hostedgames`.`id`,
 	    			`games`.`name` AS 'gameName',
@@ -82,21 +102,15 @@
                    FROM `hostedgames` 
                    LEFT JOIN `games` ON `hostedgames`.`gameid` = `games`.`id`
                    LEFT JOIN `users` ON `hostedgames`.`userid` = `users`.`id`";
-           $sql.=($gameName!=""||$userId > 0|| $id >0 || $developer !="")?" WHERE":'';
-           $sql.=($id>=0)?"`hostedgames`.`id`='%s'":"";
-           $sql.=($gameName !="" && ($id >0) )?" AND":"";
-           $sql.=($gameName != "")?"`games`.`name` = '%s'":"";
+           
            $sql.=($userId>0 && ($gameName > 0 || $id))?" AND'":'';
            $sql.=($userId>0 )?" `users`.`id` = '%s'":'';
 		   $sql.=($developer!="" && ($gameName > 0 || $id) || $userId)?" AND ":"";
            $sql.=($developer!="")?" `games`.`developer` = '%s'":"";
 		   
            $param = array();
-           ($id>0)?array_push($param, $id):'';
-           ($gameName != "")?array_push($param, $gameName ):'';
-           ($userId>0)?array_push($param, $userId):'';
-           ($developer!="")?array_push($param, $developer):'';
-           return $database->resultArray($database->query($sql,$param));
+
+           return $database->query($sql,$param,false,$whereArray);
         }
         
    

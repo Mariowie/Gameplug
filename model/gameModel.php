@@ -46,6 +46,27 @@
          */
          function selectGames($id,$name,$developer,$user)
         {
+             
+            $whereArray = array();
+            if($id >= 0 )
+            { 
+                $whereArray["`games`.id`"] = $openId;
+            }
+            if($developer !="")
+            {
+                $whereArray["`games`.`developer`"] = array();
+                $whereArray["`games`.`developer`"]["key"] = '"'.$developer.'"';
+                $whereArray["`games`.`developer`"]["match"] = "LIKE";
+            } 
+            if($name !="")
+            {
+                $whereArray["`games`.`name`"] = $name;
+            }
+            if($user >=0)
+            {
+                $whereArray["`userachievements`.`userId`"] = $user;
+            }
+            
              $database = new Database();
              $sql = "SELECT `games`.`id`,`games`.`name`,`games`.`releaseDate`,`games`.`developer`,
                                 `games`.`downloadUrl`,
@@ -68,23 +89,10 @@
                                     FROM  `userachievements`
                                 ) AS `userachievements` ON `userachievements`.`achievementId` = `achievements`.`id`
                     ";             
-             $sql.=($id >= 0 || $name !="" || $developer != "" || $user >=0)?" WHERE ":"";
-             $sql.=($id >= 0)?"`games`.`id` = '%s'":""; 
-             $sql.=($id >= 0 && $name !="")?" AND ":""; 
-             $sql.=($name != "")?"`games`.`name`= '%s'":"";
-             $sql.=($developer!="" &&($name != ""|| $id >= 0))?" AND":"";
-             $sql.=($developer !="")?"`games`.`developer` LIKE '%s'":"";
-             $sql.=($user >=0 &&($id>=0 || $name !="" || $developer != ""))?" AND ":"";
-             $sql.=($user >=0 )?"`userachievements`.`userId`= '%s' OR `highscore`.`userId` ='%s'":"";
-             
+
              
              $param= array();
-             ($id >= 0)?array_push($param, $id):"";
-             ($name != "")?array_push($param, $name):"";
-             ($developer != "")?array_push($param, $developer):"";
-             ($user >= "")?array_push($param, $user):"";
-             ($user >= "")?array_push($param, $user):"";
-             return $database->resultArray($database->query($sql,$param));
+             return $database->query($sql,$param,false,$whereArray);
         }
         
         /**

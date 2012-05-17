@@ -112,7 +112,7 @@
                                                                     'subject' =>$users[0],
                                                                     'url'=>url
                                                                 ));
-                $achievements = $this->client->selectAchievementsUser($id,-2);
+                $achievements = $this->client->selectAchievementsUser($id,"","");
                 $achievementsTemplate = $this->twig->render('achievements.html.twig',
                                                             array(
                                                                     'achievements'=>$achievements,
@@ -153,7 +153,7 @@
 
             $id= ($id == 'all')?-1:$id;
             $id = str_replace("%20", " ", $id);
-            echo $id;
+            
             $gameRequest = $this->client->selectGames(-1,$id,$developer,-1); 
             
             $id = (sizeof($gameRequest)<=0)?"":$id;

@@ -16,6 +16,21 @@
             $gameId = selectGames(-1,$gameName,$developer,-1);
             $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
             
+            
+            $whereArray = array();
+            if($gameId >= 0 != ""  )
+            { 
+                $whereArray["`games`.id`"] = $openId;
+            }
+            if($id >= 0)
+            {
+                $whereArray["`achievements`.id`"] = $id;
+            } 
+            if($name !="")
+            {
+                $whereArray["`achievements`.`titel`"] = $name;
+            }
+            
            $database = new Database();
            $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,
                             `achievements`.`points`,`games`.`name` AS gameName,`games`.`developer`, 
@@ -29,20 +44,9 @@
                         GROUP BY `achievementId`
                     ) AS userachievement ON userachievement.`achievementId` = `achievements`.`id`
                        ";
-           $sql.= ($gameId >= 0 || $id >= 0 ||$name!="" )?" WHERE ":"";
-           $sql.= ($gameId >= 0 )?" `games`.id = '%s' ":"";
-           $sql.= ($gameId >= 0 && ( $id >= 0 ||$name!="" ))?" AND ":"";
-           $sql.= ($id >= 0 )?" `achievements`.id = '%s' ":"";
-           $sql.= ( $name !="" && $id >= 0 )?" AND ":"";
-           $sql.= ( $name !="" )?" `achievements`.`titel` = '%s' ":"";
-           
-           $param = array();
-           ($gameId >= 0)?array_push($param, $gameId):"";
-           ($id >= 0)?array_push($param, $id):"";
-           ($name !="")?array_push($param, $name):"";
-            $result =$database->query($sql,$param);
-            $array = $database->resultArray($result);
-            return $array;                                 
+            $result =$database->query($sql,array(),false,$whereArray);
+            
+            return $result;                                 
        }
        
        /**
@@ -129,8 +133,17 @@
             $gameId = selectGames(-1,$gameName,$developer,-1);
                 $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
         // TODO compress sql 
-            if($userId >= 0 && $gameId >= 0)
-            {    
+                
+            $WhereArray = array();
+            if($userId >= 0 )
+            {
+               $WhereArray["`userachievements`.`userId`"] = $userId;
+            }   
+            
+            if($gameId >= 0)
+            {
+                $WhereArray["`games`.`id`"] = $gameId;
+            }
                 $sql = "SELECT `achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,
                                 `achievements`.`points`,`games`.`name` AS gameName,`games`.`developer`,
                                 COALESCE(count.`times`,0) AS achieved,
@@ -143,66 +156,10 @@
                                     SELECT COUNT(*) AS times,`achievementId`
                                     FROM `userachievements`
                                     GROUP BY `achievementId`
-                                ) AS count ON count.`achievementId` = `achievements`.`id`
-                        WHERE `userachievements`.`userId` = '%s' AND `games`.`id` = '%s'";
-                $result =$database->query($sql,array($userId,$gameId));
-                $array = $database->resultArray($result);
-                return $array;
-            }
-            elseif($userId >= 0 || $gameId >= 0)
-            {
-                if($userId >= 0 )
-                {
-                    $sql = "SELECT `games`.`developer`,`achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
-                            FROM `achievements` 
-                            LEFT JOIN `userachievements` ON `achievements`.`id` = `userachievements`.`achievementId`
-                            LEFT JOIN `games` ON `achievements`.gameId = `games`.id
-                            LEFT JOIN 
-                                    (
-                                        SELECT COUNT(*) AS times,`achievementId`
-                                        FROM `userachievements`
-                                        GROUP BY `achievementId`
-                                    ) AS count ON count.`achievementId` = `achievements`.`id`
-                            WHERE `userachievements`.`userId` = '%s'";
-                    $result =$database->query($sql,array($userId));
-                    $array = $database->resultArray($result);
-                    return $array;
-                }
-                elseif($gameId >= 0)
-                {
-                    $sql = "SELECT `games`.`developer`,`achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
-                            FROM `achievements` 
-                            LEFT JOIN `userachievements` ON `achievements`.`id` = `userachievements`.`achievementId`
-                            LEFT JOIN `games` ON `achievements`.gameId = `games`.id
-                            LEFT JOIN 
-                                    (
-                                        SELECT COUNT(*) AS times,`achievementId`
-                                        FROM `userachievements`
-                                        GROUP BY `achievementId`
-                                    ) AS count ON count.`achievementId` = `achievements`.`id`
-                            WHERE `games`.`id` = '%s'";
-                    $result =$database->query($sql,array($gameId));
-                    $array = $database->resultArray($result);
-                    return $array;
-                }
-                
-            }
-            else 
-            {
-                $sql = "SELECT `games`.`developer`,`achievements`.`id`,`achievements`.`titel` AS title,`achievements`.`description` ,`achievements`.`points`,`games`.`name` AS gameName,COALESCE(count.`times`,0) AS achieved,COALESCE(`userachievements`.`dateOfAchieving`,0) AS date,`games`.id AS gameId
-                        FROM `achievements` 
-                        LEFT JOIN `userachievements` ON `achievements`.`id` = `userachievements`.`achievementId`
-                        LEFT JOIN `games` ON `achievements`.gameId = `games`.id
-                        LEFT JOIN 
-                                (
-                                    SELECT COUNT(*) AS times,`achievementId`
-                                    FROM `userachievements`
-                                    GROUP BY `achievementId`
                                 ) AS count ON count.`achievementId` = `achievements`.`id`";
-                $result =$database->query($sql,array());
-                $array = $database->resultArray($result);
-                return $array; 
-            }
+                
+                $array =$database->query($sql,array($userId,$gameId),false,$WhereArray);
+                return $array;
 
        }
        

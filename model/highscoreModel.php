@@ -49,6 +49,23 @@
                 $gameId = selectGames(-1,$gameName,$developer,-1);
                 $gameId = ( sizeof($gameId) == 1)?$gameId[0]["id"]:-1;
                 
+                
+            $WhereArray = array();
+            if($gameId>0 )
+            {
+               $WhereArray["`highscores`.`gameid`"] = $gameId;
+            }   
+            
+            if($userId > 0)
+            {
+                $WhereArray["`highscores`.`userId`"] = $userId;
+            }
+            
+            if($date !="")
+            {
+                $WhereArray["`highscores`.`date`"] = $date;
+            }
+                
               $database = new Database();
                 $sql = "SELECT `games`.`name` AS gameName,`games`.`developer`,
                                 `games`.`id` AS gameid,`users`.`id` AS userid,`users`.`nickname` AS userName,
@@ -57,18 +74,9 @@
                         LEFT JOIN `games` ON `highscores`.`gameid` = `games`.`id`
                         LEFT JOIN `users` ON `highscores`.`userid` = `users`.`id`                     
                        ";
-                $sql.=($gameId>0||$userId > 0|| $date !="")?" WHERE ":'';
-                $sql.=($gameId>0)?"`highscores`.`gameid` = '%s'":"";
-                $sql.=($gameId>0 && ($userId > 0 || $date >0))?" AND ":"";
-                $sql.=($userId > 0)?"`highscores`.`userId` ='%s'":"";
-                $sql.=($date !="" && $userId >0)?" AND `highscores`.`date` = '%s'":'';
-                $sql.=($date !="" && $userId <0)?" `highscores`.`date` = '%s'":'';
-                
-                $param = array();
-                ($gameId>0)?array_push($param, $gameId):'';
-                ($userId > 0)?array_push($param, $userId ):'';
-                ($date>0)?array_push($param, $date):'';
-                 $result = $database->resultArray($database->query($sql,$param));
+            
+                $param = array();             
+                 $result = $database->query($sql,$param,false,$WhereArray);
                  return $result;
         }
         
