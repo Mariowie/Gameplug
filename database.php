@@ -47,7 +47,7 @@ class Database {
                {
                   $whereclause .= "AND"; 
                }
-               
+              $pos++; 
            }
        }
        $sql.=$whereclause; 
