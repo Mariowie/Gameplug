@@ -51,7 +51,7 @@ class Database {
            }
        }
        $sql.=$whereclause; 
-       echo $sql;
+       //echo $sql;
        	if(!is_array($vars)){
 			$vars = array($vars);
 		}
@@ -109,5 +109,4 @@ class Database {
     }
     
 }
-
 
